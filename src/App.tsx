@@ -16,6 +16,7 @@ import ProductLanding from "./pages/ProductLanding";
 import Analytics from "./pages/Analytics";
 import SocialAccounts from "./pages/SocialAccounts";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
