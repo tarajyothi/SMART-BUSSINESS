@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
-import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash, MessageCircle, Download, Copy, Send, Store, Clapperboard, Film, Mic, Loader2, RefreshCw } from "lucide-react";
+import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash, MessageCircle, Download, Copy, Send, Store, Clapperboard, Film, Mic, Loader2, RefreshCw, Video, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -307,7 +307,7 @@ const ProductLanding = () => {
           </motion.div>
         )}
 
-        {/* Video Marketing Panel */}
+        {/* Video Preview Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -316,47 +316,92 @@ const ProductLanding = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-display text-2xl font-bold text-foreground flex items-center gap-2">
-              <Clapperboard className="h-5 w-5 text-primary" />
-              Video Marketing
+              <Video className="h-5 w-5 text-primary" />
+              Video Preview
             </h2>
-            {!reelContent && !reelLoading && (
-              <Button variant="hero" onClick={handleGenerateReel} className="gap-2">
-                <Sparkles className="h-4 w-4" /> Generate Reel Idea
-              </Button>
-            )}
           </div>
 
-          {reelLoading && (
-            <div className="glass-card rounded-xl p-12 text-center">
-              <Loader2 className="h-8 w-8 text-primary animate-spin mx-auto mb-3" />
-              <p className="text-muted-foreground text-sm">Crafting your viral reel content...</p>
-            </div>
-          )}
-
+          {/* Empty / Generate state */}
           {!reelContent && !reelLoading && (
-            <div className="glass-card rounded-xl p-12 text-center">
-              <Film className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
-              <p className="text-muted-foreground text-sm">Click "Generate Reel Idea" to create video marketing content for this product.</p>
+            <div className="glass-card rounded-xl p-14 text-center space-y-5">
+              <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                <Play className="h-9 w-9 text-primary" />
+              </div>
+              <div>
+                <p className="font-display text-lg font-semibold text-foreground mb-1">Create a Marketing Video</p>
+                <p className="text-muted-foreground text-sm max-w-md mx-auto">
+                  AI will generate a video script, voice narration, caption, and hashtags for this product.
+                </p>
+              </div>
+              <Button variant="hero" size="lg" onClick={handleGenerateReel} className="gap-2">
+                <Video className="h-5 w-5" /> Generate Video
+              </Button>
             </div>
           )}
 
-          {reelContent && !reelLoading && (
-            <div className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                {/* Reel Idea */}
-                <div className="glass-card rounded-xl p-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-primary/10"><Sparkles className="h-4 w-4 text-primary" /></div>
-                      <h3 className="font-display font-semibold text-foreground text-sm">Reel Idea</h3>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.reelIdea); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
-                  </div>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{reelContent.reelIdea}</p>
-                </div>
+          {/* Loading */}
+          {reelLoading && (
+            <div className="glass-card rounded-xl p-14 text-center">
+              <Loader2 className="h-10 w-10 text-primary animate-spin mx-auto mb-4" />
+              <p className="font-display text-lg font-semibold text-foreground">Creating your video content...</p>
+              <p className="text-sm text-muted-foreground mt-1">Generating script, narration & captions</p>
+            </div>
+          )}
 
+          {/* Results */}
+          {reelContent && !reelLoading && (
+            <div className="space-y-5">
+              {/* Action buttons bar */}
+              <div className="flex flex-wrap gap-3">
+                <Button variant="hero" onClick={handleGenerateReel} className="gap-2">
+                  <RefreshCw className="h-4 w-4" /> Generate Video
+                </Button>
+                <Button
+                  variant="hero-outline"
+                  className="gap-2"
+                  onClick={() => {
+                    const text = `VIDEO SCRIPT — ${product.name}\n${"=".repeat(40)}\n\n🎬 VIDEO SCRIPT\n${reelContent.videoScript}\n\n🎙️ VOICE NARRATION\n${reelContent.narrationScript}\n\n📱 CAPTION\n${reelContent.caption}\n\n# HASHTAGS\n${reelContent.hashtags}`;
+                    const blob = new Blob([text], { type: "text/plain" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `video-${product.slug || product.name}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    toast.success("Video script downloaded!");
+                  }}
+                >
+                  <Download className="h-4 w-4" /> Download Video
+                </Button>
+                <Button
+                  variant="hero-outline"
+                  className="gap-2"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${reelContent.caption}\n\n${reelContent.hashtags}`);
+                    toast.success("Caption copied!");
+                  }}
+                >
+                  <Copy className="h-4 w-4" /> Copy Caption
+                </Button>
+              </div>
+
+              {/* Video Script card - full width featured */}
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-xl p-6 space-y-3 border border-primary/20">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-lg bg-cyan-400/10"><Film className="h-5 w-5 text-cyan-400" /></div>
+                    <h3 className="font-display font-semibold text-foreground">Video Script</h3>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.videoScript); toast.success("Script copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">{reelContent.videoScript}</p>
+              </motion.div>
+
+              <div className="grid md:grid-cols-2 gap-4">
                 {/* Voice Narration */}
-                <div className="glass-card rounded-xl p-5 space-y-3">
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.07 }} className="glass-card rounded-xl p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="p-1.5 rounded-lg bg-amber-400/10"><Mic className="h-4 w-4 text-amber-400" /></div>
@@ -365,61 +410,39 @@ const ProductLanding = () => {
                     <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.narrationScript); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
                   </div>
                   <p className="text-muted-foreground text-sm leading-relaxed">{reelContent.narrationScript}</p>
-                </div>
-              </div>
+                </motion.div>
 
-              {/* Video Script - full width */}
-              <div className="glass-card rounded-xl p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-cyan-400/10"><Film className="h-4 w-4 text-cyan-400" /></div>
-                    <h3 className="font-display font-semibold text-foreground text-sm">15s Video Script</h3>
-                  </div>
-                  <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.videoScript); toast.success("Script copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy Script</Button>
-                </div>
-                <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">{reelContent.videoScript}</p>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
                 {/* Caption */}
-                <div className="glass-card rounded-xl p-5 space-y-3">
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }} className="glass-card rounded-xl p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="p-1.5 rounded-lg bg-pink-400/10"><Instagram className="h-4 w-4 text-pink-400" /></div>
                       <h3 className="font-display font-semibold text-foreground text-sm">Caption</h3>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => handleDownloadCaption(reelContent.caption)} className="h-7 gap-1 text-xs text-muted-foreground"><Download className="h-3 w-3" />Download</Button>
+                    <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.caption); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
                   </div>
                   <p className="text-muted-foreground text-sm leading-relaxed">{reelContent.caption}</p>
-                </div>
-
-                {/* Hashtags */}
-                <div className="glass-card rounded-xl p-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-emerald-400/10"><Hash className="h-4 w-4 text-emerald-400" /></div>
-                      <h3 className="font-display font-semibold text-foreground text-sm">Hashtags</h3>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.hashtags); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {reelContent.hashtags.split(/\s+/).filter(Boolean).map((tag) => (
-                      <span key={tag} className="text-xs bg-primary/10 text-primary rounded-full px-2.5 py-0.5 border border-primary/20">{tag}</span>
-                    ))}
-                  </div>
-                </div>
+                </motion.div>
               </div>
 
-              {/* Generate Another */}
-              <div className="flex justify-center pt-2">
-                <Button variant="hero-outline" onClick={handleGenerateReel} className="gap-2">
-                  <RefreshCw className="h-4 w-4" /> Generate Another Idea
-                </Button>
-              </div>
+              {/* Hashtags */}
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.21 }} className="glass-card rounded-xl p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-emerald-400/10"><Hash className="h-4 w-4 text-emerald-400" /></div>
+                    <h3 className="font-display font-semibold text-foreground text-sm">Hashtags</h3>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.hashtags); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {reelContent.hashtags.split(/\s+/).filter(Boolean).map((tag) => (
+                    <span key={tag} className="text-xs bg-primary/10 text-primary rounded-full px-2.5 py-0.5 border border-primary/20">{tag}</span>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           )}
         </motion.div>
-
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
