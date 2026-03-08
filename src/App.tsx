@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import UploadProduct from "./pages/UploadProduct";
 import ProductPage from "./pages/ProductPage";
+import ProductLanding from "./pages/ProductLanding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
               <ProtectedRoute><UploadProduct /></ProtectedRoute>
             } />
             <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/p/:slug" element={<ProductLanding />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
