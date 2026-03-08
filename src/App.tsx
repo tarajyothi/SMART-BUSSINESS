@@ -83,6 +83,9 @@ const App = () => (
               <Route path="/reel-generator" element={
                 <ProtectedRoute><ReelGenerator /></ProtectedRoute>
               } />
+              <Route path="/video-generator" element={
+                <ProtectedRoute><AIVideoGenerator /></ProtectedRoute>
+              } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/marketplace" element={<Marketplace />} />
