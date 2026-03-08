@@ -96,6 +96,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          auto_post_enabled: boolean
           created_at: string
           full_name: string
           id: string
@@ -103,6 +104,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          auto_post_enabled?: boolean
           created_at?: string
           full_name?: string
           id?: string
@@ -110,6 +112,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          auto_post_enabled?: boolean
           created_at?: string
           full_name?: string
           id?: string
@@ -150,6 +153,50 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      social_posts: {
+        Row: {
+          caption: string | null
+          created_at: string
+          hashtags: string | null
+          id: string
+          platform: string
+          posted_at: string | null
+          product_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          hashtags?: string | null
+          id?: string
+          platform: string
+          posted_at?: string | null
+          product_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          hashtags?: string | null
+          id?: string
+          platform?: string
+          posted_at?: string | null
+          product_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_posts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

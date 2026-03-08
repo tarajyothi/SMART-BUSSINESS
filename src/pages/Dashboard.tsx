@@ -1,12 +1,45 @@
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2 } from "lucide-react";
+import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2, Send } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [autoPostEnabled, setAutoPostEnabled] = useState(false);
+  const [togglingAutoPost, setTogglingAutoPost] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("auto_post_enabled")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data) setAutoPostEnabled(data.auto_post_enabled);
+      });
+  }, [user]);
+
+  const handleToggleAutoPost = async (checked: boolean) => {
+    setTogglingAutoPost(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ auto_post_enabled: checked })
+      .eq("user_id", user!.id);
+    if (error) {
+      toast.error("Failed to update auto-post setting");
+    } else {
+      setAutoPostEnabled(checked);
+      toast.success(checked ? "Auto-posting enabled!" : "Auto-posting disabled");
+    }
+    setTogglingAutoPost(false);
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -51,6 +84,33 @@ const Dashboard = () => {
           </h1>
           <p className="text-muted-foreground mb-10">Here's your seller dashboard overview.</p>
 
+          {/* Auto-Post Toggle */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="glass-card rounded-xl p-6 mb-10 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <Send className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-display text-lg font-semibold text-foreground">Auto Posting</h3>
+                <p className="text-sm text-muted-foreground">
+                  {autoPostEnabled
+                    ? "Products will be auto-posted to connected social accounts on upload."
+                    : "Enable to automatically share new products to your connected social accounts."}
+                </p>
+              </div>
+            </div>
+            <Switch
+              checked={autoPostEnabled}
+              onCheckedChange={handleToggleAutoPost}
+              disabled={togglingAutoPost}
+            />
+          </motion.div>
+
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {stats.map((s, i) => (
@@ -74,7 +134,7 @@ const Dashboard = () => {
 
           {/* Action Buttons */}
           <h2 className="font-display text-xl font-semibold text-foreground mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {actions.map((a, i) => (
               <motion.button
                 key={a.label}
