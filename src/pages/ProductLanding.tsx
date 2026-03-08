@@ -307,7 +307,120 @@ const ProductLanding = () => {
           </motion.div>
         )}
 
-        {/* Publish Everywhere Section */}
+        {/* Video Marketing Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="mt-12"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-display text-2xl font-bold text-foreground flex items-center gap-2">
+              <Clapperboard className="h-5 w-5 text-primary" />
+              Video Marketing
+            </h2>
+            {!reelContent && !reelLoading && (
+              <Button variant="hero" onClick={handleGenerateReel} className="gap-2">
+                <Sparkles className="h-4 w-4" /> Generate Reel Idea
+              </Button>
+            )}
+          </div>
+
+          {reelLoading && (
+            <div className="glass-card rounded-xl p-12 text-center">
+              <Loader2 className="h-8 w-8 text-primary animate-spin mx-auto mb-3" />
+              <p className="text-muted-foreground text-sm">Crafting your viral reel content...</p>
+            </div>
+          )}
+
+          {!reelContent && !reelLoading && (
+            <div className="glass-card rounded-xl p-12 text-center">
+              <Film className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+              <p className="text-muted-foreground text-sm">Click "Generate Reel Idea" to create video marketing content for this product.</p>
+            </div>
+          )}
+
+          {reelContent && !reelLoading && (
+            <div className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Reel Idea */}
+                <div className="glass-card rounded-xl p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-primary/10"><Sparkles className="h-4 w-4 text-primary" /></div>
+                      <h3 className="font-display font-semibold text-foreground text-sm">Reel Idea</h3>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.reelIdea); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{reelContent.reelIdea}</p>
+                </div>
+
+                {/* Voice Narration */}
+                <div className="glass-card rounded-xl p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-amber-400/10"><Mic className="h-4 w-4 text-amber-400" /></div>
+                      <h3 className="font-display font-semibold text-foreground text-sm">Voice Narration</h3>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.narrationScript); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{reelContent.narrationScript}</p>
+                </div>
+              </div>
+
+              {/* Video Script - full width */}
+              <div className="glass-card rounded-xl p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-cyan-400/10"><Film className="h-4 w-4 text-cyan-400" /></div>
+                    <h3 className="font-display font-semibold text-foreground text-sm">15s Video Script</h3>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.videoScript); toast.success("Script copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy Script</Button>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">{reelContent.videoScript}</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Caption */}
+                <div className="glass-card rounded-xl p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-pink-400/10"><Instagram className="h-4 w-4 text-pink-400" /></div>
+                      <h3 className="font-display font-semibold text-foreground text-sm">Caption</h3>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => handleDownloadCaption(reelContent.caption)} className="h-7 gap-1 text-xs text-muted-foreground"><Download className="h-3 w-3" />Download</Button>
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{reelContent.caption}</p>
+                </div>
+
+                {/* Hashtags */}
+                <div className="glass-card rounded-xl p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-emerald-400/10"><Hash className="h-4 w-4 text-emerald-400" /></div>
+                      <h3 className="font-display font-semibold text-foreground text-sm">Hashtags</h3>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(reelContent.hashtags); toast.success("Copied!"); }} className="h-7 gap-1 text-xs text-muted-foreground"><Copy className="h-3 w-3" />Copy</Button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {reelContent.hashtags.split(/\s+/).filter(Boolean).map((tag) => (
+                      <span key={tag} className="text-xs bg-primary/10 text-primary rounded-full px-2.5 py-0.5 border border-primary/20">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Generate Another */}
+              <div className="flex justify-center pt-2">
+                <Button variant="hero-outline" onClick={handleGenerateReel} className="gap-2">
+                  <RefreshCw className="h-4 w-4" /> Generate Another Idea
+                </Button>
+              </div>
+            </div>
+          )}
+        </motion.div>
+
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
