@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { Hash, MessageSquare } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import {
   Package,
