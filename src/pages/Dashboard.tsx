@@ -96,7 +96,7 @@ const Dashboard = () => {
             <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h2 className="font-display text-xl font-semibold text-foreground mb-2">No products yet</h2>
             <p className="text-muted-foreground mb-6">Upload your first product to get started with AI-powered selling.</p>
-            <Button variant="hero">
+            <Button variant="hero" onClick={() => navigate("/upload")}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Product
             </Button>
