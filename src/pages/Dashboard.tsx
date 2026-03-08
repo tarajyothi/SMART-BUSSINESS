@@ -1,22 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2, Send, ClipboardList, Lightbulb, Image as ImageIcon, Video, Megaphone } from "lucide-react";
-import SellerChatbot from "@/components/SellerChatbot";
 import { Switch } from "@/components/ui/switch";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import DashboardLayout from "@/components/DashboardLayout";
+import {
+  Package,
+  Eye,
+  ShoppingCart,
+  Upload,
+  TrendingUp,
+  Send,
+  Lightbulb,
+  Sparkles,
+  Clock,
+  FileText,
+  Share2,
+  ArrowUpRight,
+  Plus,
+  Bell,
+  DollarSign,
+} from "lucide-react";
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  created_at: string;
+  ai_generated: boolean | null;
+  instagram_caption: string | null;
+}
+
+interface SocialPost {
+  id: string;
+  platform: string;
+  status: string;
+  created_at: string;
+  product_id: string;
+}
 
 const Dashboard = () => {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [autoPostEnabled, setAutoPostEnabled] = useState(false);
   const [togglingAutoPost, setTogglingAutoPost] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [socialPosts, setSocialPosts] = useState<SocialPost[]>([]);
+  const [totalViews, setTotalViews] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
 
   useEffect(() => {
     if (!user) return;
+
+    // Fetch profile
     supabase
       .from("profiles")
       .select("auto_post_enabled")
@@ -24,6 +64,45 @@ const Dashboard = () => {
       .single()
       .then(({ data }) => {
         if (data) setAutoPostEnabled(data.auto_post_enabled);
+      });
+
+    // Fetch products
+    supabase
+      .from("products")
+      .select("id, name, price, created_at, ai_generated, instagram_caption")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setProducts(data || []));
+
+    // Fetch social posts
+    supabase
+      .from("social_posts")
+      .select("id, platform, status, created_at, product_id")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20)
+      .then(({ data }) => setSocialPosts(data || []));
+
+    // Fetch events for views
+    supabase
+      .from("products")
+      .select("id")
+      .eq("user_id", user.id)
+      .then(async ({ data: prods }) => {
+        const ids = (prods || []).map((p) => p.id);
+        if (ids.length === 0) return;
+
+        const { data: events } = await supabase
+          .from("product_events")
+          .select("event_type, revenue")
+          .in("product_id", ids);
+
+        const views = (events || []).filter((e) => e.event_type === "view").length;
+        const orders = (events || []).filter((e) => e.event_type === "order").length;
+        const rev = (events || []).reduce((s, e) => s + (Number(e.revenue) || 0), 0);
+        setTotalViews(views);
+        setTotalOrders(orders);
+        setTotalRevenue(rev);
       });
   }, [user]);
 
@@ -42,136 +121,257 @@ const Dashboard = () => {
     setTogglingAutoPost(false);
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/");
-  };
+  // Build activity feed from products + social posts
+  const activityFeed = useMemo(() => {
+    const items: { icon: typeof Package; label: string; detail: string; time: string; color: string }[] = [];
+
+    products.slice(0, 8).forEach((p) => {
+      items.push({
+        icon: Package,
+        label: "Product created",
+        detail: p.name,
+        time: p.created_at,
+        color: "text-primary",
+      });
+      if (p.instagram_caption) {
+        items.push({
+          icon: Sparkles,
+          label: "AI caption generated",
+          detail: p.name,
+          time: p.created_at,
+          color: "text-purple-400",
+        });
+      }
+    });
+
+    socialPosts.slice(0, 8).forEach((sp) => {
+      items.push({
+        icon: Share2,
+        label: `${sp.platform} post ${sp.status}`,
+        detail: `Social post ${sp.status}`,
+        time: sp.created_at,
+        color: "text-green-400",
+      });
+    });
+
+    return items
+      .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
+      .slice(0, 8);
+  }, [products, socialPosts]);
+
+  // AI suggestions
+  const suggestions = useMemo(() => {
+    const tips: { icon: typeof Lightbulb; text: string; action?: string; href?: string }[] = [];
+    if (products.length === 0) {
+      tips.push({ icon: Upload, text: "Upload your first product to get started", action: "Upload", href: "/upload" });
+    }
+    if (products.length > 0 && products.length < 5) {
+      tips.push({ icon: TrendingUp, text: "Add more products to increase visibility in the marketplace" });
+    }
+    if (socialPosts.length === 0 && products.length > 0) {
+      tips.push({ icon: Share2, text: "Connect social accounts to auto-post your products", action: "Connect", href: "/social-accounts" });
+    }
+    if (products.length > 0) {
+      tips.push({ icon: Lightbulb, text: "Run AI Market Insights to discover trending opportunities", action: "Analyze", href: "/market-insights" });
+    }
+    tips.push({ icon: Sparkles, text: "Generate marketing campaigns with AI to boost your sales", action: "Create", href: "/campaigns" });
+    return tips.slice(0, 4);
+  }, [products, socialPosts]);
 
   const stats = [
-    { icon: Package, label: "Total Products", value: "0" },
-    { icon: Eye, label: "Total Views", value: "0" },
-    { icon: ShoppingCart, label: "Total Sales", value: "0" },
+    { icon: Package, label: "Products", value: products.length.toString(), change: "", color: "from-primary/20 to-primary/5" },
+    { icon: Eye, label: "Total Views", value: totalViews.toLocaleString(), change: "", color: "from-blue-500/20 to-blue-500/5" },
+    { icon: ShoppingCart, label: "Orders", value: totalOrders.toString(), change: "", color: "from-green-500/20 to-green-500/5" },
+    { icon: DollarSign, label: "Revenue", value: `₹${totalRevenue.toLocaleString()}`, change: "", color: "from-amber-500/20 to-amber-500/5" },
   ];
 
-  const actions = [
-    { icon: Upload, label: "Upload Product", desc: "Add a new product to your store", href: "/upload" },
-    { icon: List, label: "My Products", desc: "View and manage your listings", href: "/dashboard" },
-    { icon: ClipboardList, label: "Orders", desc: "View and manage customer orders", href: "/orders" },
-    { icon: BarChart3, label: "Analytics", desc: "Track your performance metrics", href: "/analytics" },
-    { icon: Share2, label: "Social Accounts", desc: "Connect your social media platforms", href: "/social-accounts" },
-    { icon: Lightbulb, label: "AI Insights", desc: "AI-powered market analysis & strategy", href: "/market-insights" },
-    { icon: ImageIcon, label: "Image Studio", desc: "AI-powered product image editing", href: "/image-studio" },
-    { icon: Video, label: "Video Scripts", desc: "Generate marketing video scripts", href: "/video-scripts" },
-    { icon: Megaphone, label: "Campaigns", desc: "AI marketing campaign generator", href: "/campaigns" },
-  ];
+  const formatTime = (iso: string) => {
+    const d = new Date(iso);
+    const now = new Date();
+    const diffMs = now.getTime() - d.getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return "Just now";
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b border-border bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-primary" />
-            <span className="font-display text-xl font-bold text-foreground">AgentHub AI</span>
+    <DashboardLayout>
+      <div className="p-6 lg:p-8 max-w-[1400px] mx-auto space-y-6">
+        {/* Top bar */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="flex items-start justify-between">
+          <div>
+            <h1 className="font-display text-2xl font-bold text-foreground tracking-tight">
+              Welcome back{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ""}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Here's what's happening with your store today.</p>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground hidden sm:inline">{user?.email}</span>
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
+          <Button onClick={() => navigate("/upload")} size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+            <Plus className="h-4 w-4" /> New Product
+          </Button>
+        </motion.div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {stats.map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className="rounded-xl border border-border bg-card p-5 relative overflow-hidden"
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${s.color} opacity-50`} />
+              <div className="relative">
+                <div className="flex items-center justify-between mb-3">
+                  <s.icon className="h-4 w-4 text-muted-foreground" />
+                  {s.change && (
+                    <span className="text-[11px] font-medium text-green-400 flex items-center gap-0.5">
+                      <ArrowUpRight className="h-3 w-3" /> {s.change}
+                    </span>
+                  )}
+                </div>
+                <p className="font-display text-2xl font-bold text-foreground tracking-tight">{s.value}</p>
+                <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </nav>
 
-      <main className="container mx-auto px-6 py-12 max-w-6xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="font-display text-3xl font-bold text-foreground mb-1">
-            Welcome back{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ""}!
-          </h1>
-          <p className="text-muted-foreground mb-10">Here's your seller dashboard overview.</p>
-
-          {/* Auto-Post Toggle */}
+        {/* Main grid: Activity + Notifications + Auto-post */}
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Activity Feed */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="glass-card rounded-xl p-6 mb-10 flex items-center justify-between"
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-2 rounded-xl border border-border bg-card"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <Send className="h-6 w-6 text-primary" />
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <h3 className="font-display text-sm font-semibold text-foreground">Activity Feed</h3>
               </div>
-              <div>
-                <h3 className="font-display text-lg font-semibold text-foreground">Auto Posting</h3>
-                <p className="text-sm text-muted-foreground">
-                  {autoPostEnabled
-                    ? "Products will be auto-posted to connected social accounts on upload."
-                    : "Enable to automatically share new products to your connected social accounts."}
-                </p>
-              </div>
+              <span className="text-[11px] text-muted-foreground">{activityFeed.length} events</span>
             </div>
-            <Switch
-              checked={autoPostEnabled}
-              onCheckedChange={handleToggleAutoPost}
-              disabled={togglingAutoPost}
-            />
+            <div className="divide-y divide-border">
+              {activityFeed.length === 0 ? (
+                <div className="px-5 py-10 text-center">
+                  <FileText className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground">No activity yet. Upload a product to get started.</p>
+                </div>
+              ) : (
+                activityFeed.map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 px-5 py-3 hover:bg-secondary/30 transition-colors">
+                    <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+                      <item.icon className={`h-3.5 w-3.5 ${item.color}`} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm text-foreground truncate">
+                        <span className="font-medium">{item.label}</span>
+                        <span className="text-muted-foreground"> — {item.detail}</span>
+                      </p>
+                    </div>
+                    <span className="text-[11px] text-muted-foreground shrink-0">{formatTime(item.time)}</span>
+                  </div>
+                ))
+              )}
+            </div>
           </motion.div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-            {stats.map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="glass-card rounded-xl p-6 flex items-center gap-4"
-              >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <s.icon className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">{s.label}</p>
-                  <p className="text-3xl font-bold font-display text-foreground">{s.value}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Right column: Notifications + Auto-post */}
+          <div className="space-y-6">
+            {/* AI Suggestions */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="rounded-xl border border-border bg-card"
+            >
+              <div className="flex items-center gap-2 px-5 py-4 border-b border-border">
+                <Bell className="h-4 w-4 text-primary" />
+                <h3 className="font-display text-sm font-semibold text-foreground">AI Suggestions</h3>
+              </div>
+              <div className="divide-y divide-border">
+                {suggestions.map((tip, i) => (
+                  <div key={i} className="px-5 py-3 flex items-start gap-3">
+                    <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <tip.icon className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs text-foreground/80 leading-relaxed">{tip.text}</p>
+                      {tip.action && tip.href && (
+                        <button
+                          onClick={() => navigate(tip.href!)}
+                          className="text-[11px] font-medium text-primary mt-1 hover:underline inline-flex items-center gap-1"
+                        >
+                          {tip.action} <ArrowUpRight className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
 
-          {/* Action Buttons */}
-          <h2 className="font-display text-xl font-semibold text-foreground mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            {actions.map((a, i) => (
-              <motion.button
-                key={a.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.1 }}
-                onClick={() => navigate(a.href)}
-                className="glass-card rounded-xl p-6 text-left hover:border-primary/30 transition-all group cursor-pointer">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <a.icon className="h-5 w-5 text-primary" />
+            {/* Auto-Post */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="rounded-xl border border-border bg-card p-5"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Send className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground">Auto-Post</h3>
+                    <p className="text-[11px] text-muted-foreground">
+                      {autoPostEnabled ? "Active" : "Disabled"}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-1">{a.label}</h3>
-                <p className="text-sm text-muted-foreground">{a.desc}</p>
-              </motion.button>
-            ))}
-          </div>
+                <Switch
+                  checked={autoPostEnabled}
+                  onCheckedChange={handleToggleAutoPost}
+                  disabled={togglingAutoPost}
+                />
+              </div>
+            </motion.div>
 
-          {/* Empty State */}
-          <div className="glass-card rounded-xl p-10 text-center">
-            <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h2 className="font-display text-xl font-semibold text-foreground mb-2">No products yet</h2>
-            <p className="text-muted-foreground mb-6">Upload your first product to get started with AI-powered selling.</p>
-            <Button variant="hero" onClick={() => navigate("/upload")}>
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Product
-            </Button>
+            {/* Quick Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+              className="rounded-xl border border-border bg-card p-5 space-y-2"
+            >
+              <h3 className="text-sm font-semibold text-foreground mb-3">Quick Actions</h3>
+              {[
+                { label: "Upload Product", icon: Upload, href: "/upload" },
+                { label: "View Marketplace", icon: ShoppingCart, href: "/marketplace" },
+                { label: "AI Image Studio", icon: Sparkles, href: "/image-studio" },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => navigate(item.href)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-foreground/80 hover:bg-secondary/50 transition-colors group"
+                >
+                  <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <span>{item.label}</span>
+                  <ArrowUpRight className="h-3 w-3 text-muted-foreground/50 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                </button>
+              ))}
+            </motion.div>
           </div>
-        </motion.div>
-      </main>
-      <SellerChatbot />
-    </div>
+        </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
