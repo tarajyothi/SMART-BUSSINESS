@@ -169,6 +169,7 @@ const Dashboard = () => {
           </div>
         </motion.div>
       </main>
+      <SellerChatbot />
     </div>
   );
 };
