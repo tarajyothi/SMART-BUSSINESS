@@ -63,6 +63,9 @@ const App = () => (
               <Route path="/image-studio" element={
                 <ProtectedRoute><ImageStudio /></ProtectedRoute>
               } />
+              <Route path="/video-scripts" element={
+                <ProtectedRoute><VideoScripts /></ProtectedRoute>
+              } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/marketplace" element={<Marketplace />} />

@@ -60,6 +60,7 @@ const Dashboard = () => {
     { icon: Share2, label: "Social Accounts", desc: "Connect your social media platforms", href: "/social-accounts" },
     { icon: Lightbulb, label: "AI Insights", desc: "AI-powered market analysis & strategy", href: "/market-insights" },
     { icon: ImageIcon, label: "Image Studio", desc: "AI-powered product image editing", href: "/image-studio" },
+    { icon: Video, label: "Video Scripts", desc: "Generate marketing video scripts", href: "/video-scripts" },
   ];
 
   return (
