@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Zap, Quote, Instagram, Facebook, Share2, Link as LinkIcon, Heart, ShoppingCart, Upload, Sparkles, Globe } from "lucide-react";
+import { Zap, Quote, Instagram, Facebook, Share2, Link as LinkIcon, Heart, ShoppingCart, Upload, Sparkles, Globe, ArrowRight, Store, ShoppingBag, Package } from "lucide-react";
 import demoProduct from "@/assets/demo-product.jpg";
 import testimonial1 from "@/assets/testimonial-1.jpg";
 import testimonial2 from "@/assets/testimonial-2.jpg";
