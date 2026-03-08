@@ -22,6 +22,7 @@ interface Product {
 
 const ProductLanding = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { addItem, totalItems } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
