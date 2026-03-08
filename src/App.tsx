@@ -20,6 +20,7 @@ import Checkout from "./pages/Checkout";
 import Marketplace from "./pages/Marketplace";
 import Orders from "./pages/Orders";
 import Onboarding from "./pages/Onboarding";
+import MarketInsights from "./pages/MarketInsights";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,9 @@ const App = () => (
               } />
               <Route path="/social-accounts" element={
                 <ProtectedRoute><SocialAccounts /></ProtectedRoute>
+              } />
+              <Route path="/market-insights" element={
+                <ProtectedRoute><MarketInsights /></ProtectedRoute>
               } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
