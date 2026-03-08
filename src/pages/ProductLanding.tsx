@@ -26,6 +26,7 @@ const ProductLanding = () => {
   const { addItem, totalItems } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [storeSlug, setStoreSlug] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
