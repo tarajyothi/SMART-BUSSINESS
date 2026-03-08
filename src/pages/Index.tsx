@@ -485,6 +485,40 @@ const PricingSection = () => {
   );
 };
 
+const CTASection = () => (
+  <section className="py-24 relative overflow-hidden">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(190_95%_50%/0.1),transparent_60%)]" />
+    <div className="container mx-auto px-6 relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="glass-card rounded-2xl p-12 md:p-16 text-center max-w-4xl mx-auto border-primary/20 glow-border"
+      >
+        <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 text-foreground">
+          Start Selling with <span className="text-gradient">AI Today</span>
+        </h2>
+        <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
+          Join thousands of sellers using AgentHub AI to create product pages, generate marketing content, and sell more — all in seconds.
+        </p>
+        <div className="flex items-center justify-center gap-4">
+          <Link to="/signup">
+            <Button variant="hero" size="lg" className="gap-2">
+              Get Started Free <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Link to="/marketplace">
+            <Button variant="hero-outline" size="lg">
+              Browse Marketplace
+            </Button>
+          </Link>
+        </div>
+        <p className="text-xs text-muted-foreground mt-6">No credit card required • Free plan available</p>
+      </motion.div>
+    </div>
+  </section>
+);
+
 const Footer = () => (
   <footer className="border-t border-border py-12">
     <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
