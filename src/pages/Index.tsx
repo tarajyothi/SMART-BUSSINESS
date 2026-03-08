@@ -56,6 +56,46 @@ const HeroSection = () => (
   </section>
 );
 
+const SocialProofSection = () => {
+  const platforms = [
+    { icon: Instagram, name: "Instagram" },
+    { icon: Store, name: "Shopify" },
+    { icon: ShoppingBag, name: "Etsy" },
+    { icon: Package, name: "Amazon" },
+    { icon: Facebook, name: "Facebook" },
+  ];
+
+  return (
+    <section className="py-16 border-y border-border/30">
+      <div className="container mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center"
+        >
+          <p className="text-sm text-muted-foreground mb-8">Trusted by sellers on the platforms you already use</p>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+            {platforms.map((p, i) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-center gap-2.5 text-muted-foreground/60 hover:text-muted-foreground transition-colors"
+              >
+                <p.icon className="h-6 w-6" />
+                <span className="font-display text-lg font-semibold">{p.name}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
 const ProblemSection = () => (
   <section id="problem" className="py-24 relative">
     <div className="container mx-auto px-6">
