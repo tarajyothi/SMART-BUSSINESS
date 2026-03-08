@@ -67,6 +67,9 @@ const App = () => (
               <Route path="/video-scripts" element={
                 <ProtectedRoute><VideoScripts /></ProtectedRoute>
               } />
+              <Route path="/campaigns" element={
+                <ProtectedRoute><CampaignGenerator /></ProtectedRoute>
+              } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/marketplace" element={<Marketplace />} />
