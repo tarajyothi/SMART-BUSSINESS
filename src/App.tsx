@@ -28,6 +28,7 @@ import CampaignGenerator from "./pages/CampaignGenerator";
 import ProductIdeas from "./pages/ProductIdeas";
 import PostScheduler from "./pages/PostScheduler";
 import ReelGenerator from "./pages/ReelGenerator";
+import AIVideoGenerator from "./pages/AIVideoGenerator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,6 +82,9 @@ const App = () => (
               } />
               <Route path="/reel-generator" element={
                 <ProtectedRoute><ReelGenerator /></ProtectedRoute>
+              } />
+              <Route path="/video-generator" element={
+                <ProtectedRoute><AIVideoGenerator /></ProtectedRoute>
               } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
