@@ -13,6 +13,7 @@ import {
   Zap,
   LogOut,
   ChevronLeft,
+  CalendarDays,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -49,6 +50,7 @@ const aiTools = [
 
 const channels = [
   { title: "Social Accounts", url: "/social-accounts", icon: Share2 },
+  { title: "Post Scheduler", url: "/post-scheduler", icon: CalendarDays },
 ];
 
 export function AppSidebar() {

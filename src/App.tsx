@@ -26,6 +26,7 @@ import ImageStudio from "./pages/ImageStudio";
 import VideoScripts from "./pages/VideoScripts";
 import CampaignGenerator from "./pages/CampaignGenerator";
 import ProductIdeas from "./pages/ProductIdeas";
+import PostScheduler from "./pages/PostScheduler";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -73,6 +74,9 @@ const App = () => (
               } />
               <Route path="/product-ideas" element={
                 <ProtectedRoute><ProductIdeas /></ProtectedRoute>
+              } />
+              <Route path="/post-scheduler" element={
+                <ProtectedRoute><PostScheduler /></ProtectedRoute>
               } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />

@@ -1,0 +1,1 @@
+ALTER TABLE public.social_posts ADD COLUMN IF NOT EXISTS scheduled_for TIMESTAMP WITH TIME ZONE;

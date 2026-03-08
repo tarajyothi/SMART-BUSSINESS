@@ -214,6 +214,7 @@ export type Database = {
           platform: string
           posted_at: string | null
           product_id: string
+          scheduled_for: string | null
           status: string
           user_id: string
         }
@@ -225,6 +226,7 @@ export type Database = {
           platform: string
           posted_at?: string | null
           product_id: string
+          scheduled_for?: string | null
           status?: string
           user_id: string
         }
@@ -236,6 +238,7 @@ export type Database = {
           platform?: string
           posted_at?: string | null
           product_id?: string
+          scheduled_for?: string | null
           status?: string
           user_id?: string
         }
