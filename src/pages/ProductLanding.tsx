@@ -230,8 +230,8 @@ const ProductLanding = () => {
           </h2>
           <p className="text-muted-foreground mb-6">Promote your product across all channels in one click.</p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {/* Copy Instagram Caption */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {/* Instagram */}
             <button
               onClick={handleCopyCaption}
               className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
@@ -239,11 +239,54 @@ const ProductLanding = () => {
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center mx-auto mb-3 group-hover:from-pink-500/30 group-hover:to-purple-500/30 transition-colors">
                 <Instagram className="h-6 w-6 text-pink-400" />
               </div>
-              <p className="font-display text-sm font-semibold text-foreground">Copy Caption</p>
-              <p className="text-xs text-muted-foreground mt-1">Caption + Hashtags</p>
+              <p className="font-display text-sm font-semibold text-foreground">Instagram</p>
+              <p className="text-xs text-muted-foreground mt-1">Copy caption + hashtags</p>
             </button>
 
-            {/* Share to WhatsApp */}
+            {/* Pinterest */}
+            <button
+              onClick={() => {
+                const pinUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent(product.image_url || "")}&description=${encodeURIComponent(product.name)}`;
+                window.open(pinUrl, "_blank");
+              }}
+              className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-red-500/15 flex items-center justify-center mx-auto mb-3 group-hover:bg-red-500/25 transition-colors">
+                <svg className="h-6 w-6 text-red-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+              </div>
+              <p className="font-display text-sm font-semibold text-foreground">Pinterest</p>
+              <p className="text-xs text-muted-foreground mt-1">Pin product image</p>
+            </button>
+
+            {/* YouTube */}
+            <button
+              onClick={() => {
+                const script = `🎬 YouTube Shorts Script for "${product.name}"\n\n🪝 Hook (0-3s):\n"Stop scrolling! You NEED this."\n\n📦 Product (3-15s):\n"Introducing ${product.name} — ${product.description || "your new must-have"}. Available now for just ₹${product.price}."\n\n🔥 CTA (15-20s):\n"Link in bio. Don't miss out!"\n\n${product.hashtags || ""}`;
+                navigator.clipboard.writeText(script);
+                toast.success("YouTube Shorts script copied!");
+              }}
+              className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-red-600/15 flex items-center justify-center mx-auto mb-3 group-hover:bg-red-600/25 transition-colors">
+                <svg className="h-6 w-6 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </div>
+              <p className="font-display text-sm font-semibold text-foreground">YouTube</p>
+              <p className="text-xs text-muted-foreground mt-1">Copy video script</p>
+            </button>
+
+            {/* Facebook */}
+            <button
+              onClick={handleShareFacebook}
+              className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-blue-600/15 flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-600/25 transition-colors">
+                <Facebook className="h-6 w-6 text-blue-500" />
+              </div>
+              <p className="font-display text-sm font-semibold text-foreground">Facebook</p>
+              <p className="text-xs text-muted-foreground mt-1">Share product link</p>
+            </button>
+
+            {/* WhatsApp */}
             <button
               onClick={() => {
                 const text = `Check out *${product.name}* for just ₹${product.price}!\n\n${product.description || ""}\n\n${shareUrl}`;
@@ -258,7 +301,7 @@ const ProductLanding = () => {
               <p className="text-xs text-muted-foreground mt-1">Share via message</p>
             </button>
 
-            {/* Copy Product Link */}
+            {/* Copy Link */}
             <button
               onClick={handleCopyLink}
               className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
@@ -270,7 +313,7 @@ const ProductLanding = () => {
               <p className="text-xs text-muted-foreground mt-1">Product page URL</p>
             </button>
 
-            {/* Download Product Image */}
+            {/* Download Image */}
             <button
               onClick={async () => {
                 if (!product.image_url) {
