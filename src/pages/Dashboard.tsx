@@ -241,6 +241,71 @@ const Dashboard = () => {
           ))}
         </div>
 
+        {/* AI Automation Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="rounded-xl border border-primary/20 bg-card overflow-hidden"
+        >
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-primary/5">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-primary" />
+              </div>
+              <h3 className="font-display text-sm font-semibold text-foreground">AI Automation</h3>
+            </div>
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+              {aiAutomationFeed.length} actions
+            </span>
+          </div>
+          {/* Summary counters */}
+          <div className="grid grid-cols-4 gap-px bg-border/50">
+            {aiStats.map((s) => (
+              <div key={s.label} className="bg-card px-4 py-3 text-center">
+                <p className="font-display text-lg font-bold text-foreground">{s.value}</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{s.label}</p>
+              </div>
+            ))}
+          </div>
+          {/* Timeline */}
+          <div className="px-5 py-3">
+            {aiAutomationFeed.length === 0 ? (
+              <div className="py-8 text-center">
+                <Sparkles className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">No AI actions yet. Upload a product to trigger AI automation.</p>
+              </div>
+            ) : (
+              <div className="relative">
+                {/* Timeline line */}
+                <div className="absolute left-[15px] top-2 bottom-2 w-px bg-border" />
+                <div className="space-y-1">
+                  {aiAutomationFeed.map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.25 + i * 0.04 }}
+                      className="flex items-center gap-3 py-2 pl-1 relative"
+                    >
+                      <div className={`w-[30px] h-[30px] rounded-full ${item.bg} flex items-center justify-center shrink-0 relative z-10 ring-2 ring-card`}>
+                        <item.icon className={`h-3.5 w-3.5 ${item.color}`} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm text-foreground truncate">
+                          <span className="font-medium">{item.label}</span>
+                          <span className="text-muted-foreground"> — {item.detail}</span>
+                        </p>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground shrink-0">{formatTime(item.time)}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
         {/* Main grid: Activity + Notifications + Auto-post */}
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Activity Feed */}
