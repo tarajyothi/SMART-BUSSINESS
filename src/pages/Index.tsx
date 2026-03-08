@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Zap, Quote, Instagram, Facebook, Share2, Link as LinkIcon, Heart, ShoppingCart, Upload, Sparkles, Globe } from "lucide-react";
+import { Zap, Quote, Instagram, Facebook, Share2, Link as LinkIcon, Heart, ShoppingCart, Upload, Sparkles, Globe, ArrowRight, Store, ShoppingBag, Package } from "lucide-react";
 import demoProduct from "@/assets/demo-product.jpg";
 import testimonial1 from "@/assets/testimonial-1.jpg";
 import testimonial2 from "@/assets/testimonial-2.jpg";
@@ -55,6 +55,46 @@ const HeroSection = () => (
     </div>
   </section>
 );
+
+const SocialProofSection = () => {
+  const platforms = [
+    { icon: Instagram, name: "Instagram" },
+    { icon: Store, name: "Shopify" },
+    { icon: ShoppingBag, name: "Etsy" },
+    { icon: Package, name: "Amazon" },
+    { icon: Facebook, name: "Facebook" },
+  ];
+
+  return (
+    <section className="py-16 border-y border-border/30">
+      <div className="container mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center"
+        >
+          <p className="text-sm text-muted-foreground mb-8">Trusted by sellers on the platforms you already use</p>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+            {platforms.map((p, i) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-center gap-2.5 text-muted-foreground/60 hover:text-muted-foreground transition-colors"
+              >
+                <p.icon className="h-6 w-6" />
+                <span className="font-display text-lg font-semibold">{p.name}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
 const ProblemSection = () => (
   <section id="problem" className="py-24 relative">
@@ -445,6 +485,40 @@ const PricingSection = () => {
   );
 };
 
+const CTASection = () => (
+  <section className="py-24 relative overflow-hidden">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(190_95%_50%/0.1),transparent_60%)]" />
+    <div className="container mx-auto px-6 relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="glass-card rounded-2xl p-12 md:p-16 text-center max-w-4xl mx-auto border-primary/20 glow-border"
+      >
+        <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 text-foreground">
+          Start Selling with <span className="text-gradient">AI Today</span>
+        </h2>
+        <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
+          Join thousands of sellers using AgentHub AI to create product pages, generate marketing content, and sell more — all in seconds.
+        </p>
+        <div className="flex items-center justify-center gap-4">
+          <Link to="/signup">
+            <Button variant="hero" size="lg" className="gap-2">
+              Get Started Free <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Link to="/marketplace">
+            <Button variant="hero-outline" size="lg">
+              Browse Marketplace
+            </Button>
+          </Link>
+        </div>
+        <p className="text-xs text-muted-foreground mt-6">No credit card required • Free plan available</p>
+      </motion.div>
+    </div>
+  </section>
+);
+
 const Footer = () => (
   <footer className="border-t border-border py-12">
     <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -467,6 +541,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
+      <SocialProofSection />
       <ProblemSection />
       <SolutionSection />
       <HowItWorksSection />
@@ -474,6 +549,7 @@ const Index = () => {
       <SeeItInActionSection />
       <TestimonialsSection />
       <PricingSection />
+      <CTASection />
       <Footer />
     </div>
   );
