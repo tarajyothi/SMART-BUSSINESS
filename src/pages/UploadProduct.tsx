@@ -1,13 +1,12 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Zap, Upload, ImagePlus, ArrowLeft } from "lucide-react";
+import { Zap, Upload, ImagePlus, ArrowLeft, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
 
 const UploadProduct = () => {
   const navigate = useNavigate();
@@ -19,6 +18,7 @@ const UploadProduct = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,21 +39,22 @@ const UploadProduct = () => {
       let image_url: string | null = null;
 
       if (imageFile) {
+        setLoadingStage("Uploading image...");
         const fileExt = imageFile.name.split(".").pop();
         const filePath = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
         const { error: uploadError } = await supabase.storage
           .from("product-images")
           .upload(filePath, imageFile);
-
         if (uploadError) throw uploadError;
-
         const { data: urlData } = supabase.storage
           .from("product-images")
           .getPublicUrl(filePath);
         image_url = urlData.publicUrl;
       }
 
-      const { data, error } = await supabase
+      // Create product first
+      setLoadingStage("Creating product...");
+      const { data: product, error } = await supabase
         .from("products")
         .insert({
           user_id: user.id,
@@ -67,12 +68,44 @@ const UploadProduct = () => {
 
       if (error) throw error;
 
-      toast.success("Product uploaded successfully!");
-      navigate(`/p/${data.slug}`);
+      // Generate AI content
+      setLoadingStage("Generating AI content...");
+      try {
+        const { data: aiData, error: aiError } = await supabase.functions.invoke("generate-content", {
+          body: { productName: name, price },
+        });
+
+        if (aiError) throw aiError;
+
+        // Update product with AI content
+        const updateData: Record<string, unknown> = {
+          instagram_caption: aiData.instagram_caption || "",
+          hashtags: aiData.hashtags || "",
+          ai_generated: true,
+        };
+
+        // Only update description if user didn't provide one
+        if (!description && aiData.description) {
+          updateData.description = aiData.description;
+        }
+
+        await supabase
+          .from("products")
+          .update(updateData)
+          .eq("id", product.id);
+
+        toast.success("Product uploaded with AI content!");
+      } catch (aiErr) {
+        console.error("AI generation failed:", aiErr);
+        toast.success("Product uploaded! AI content generation failed, you can retry later.");
+      }
+
+      navigate(`/p/${product.slug}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to upload product");
     } finally {
       setLoading(false);
+      setLoadingStage("");
     }
   };
 
@@ -95,7 +128,7 @@ const UploadProduct = () => {
 
       <main className="container mx-auto px-6 py-12 max-w-xl">
         <h1 className="font-display text-3xl font-bold text-foreground mb-2">Upload Product</h1>
-        <p className="text-muted-foreground mb-8">Add a new product to your store.</p>
+        <p className="text-muted-foreground mb-8">Add a new product — AI will generate marketing content automatically.</p>
 
         <form onSubmit={handleSubmit} className="glass-card rounded-xl p-8 space-y-6">
           {/* Image Upload */}
@@ -114,50 +147,27 @@ const UploadProduct = () => {
                 </>
               )}
             </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
           </div>
 
           {/* Product Name */}
           <div className="space-y-2">
             <Label htmlFor="name" className="text-foreground">Product Name</Label>
-            <Input
-              id="name"
-              placeholder="e.g. Handmade Candle"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="bg-secondary border-border"
-            />
+            <Input id="name" placeholder="e.g. Handmade Candle" value={name} onChange={(e) => setName(e.target.value)} required className="bg-secondary border-border" />
           </div>
 
           {/* Price */}
           <div className="space-y-2">
             <Label htmlFor="price" className="text-foreground">Price (₹)</Label>
-            <Input
-              id="price"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="499"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              required
-              className="bg-secondary border-border"
-            />
+            <Input id="price" type="number" min="0" step="0.01" placeholder="499" value={price} onChange={(e) => setPrice(e.target.value)} required className="bg-secondary border-border" />
           </div>
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-foreground">Description</Label>
+            <Label htmlFor="description" className="text-foreground">Description <span className="text-muted-foreground font-normal">(optional — AI will generate if empty)</span></Label>
             <textarea
               id="description"
-              placeholder="Describe your product..."
+              placeholder="Leave blank to auto-generate with AI..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
@@ -166,8 +176,17 @@ const UploadProduct = () => {
           </div>
 
           <Button type="submit" variant="hero" className="w-full" disabled={loading}>
-            <Upload className="h-4 w-4 mr-2" />
-            {loading ? "Uploading..." : "Upload Product"}
+            {loading ? (
+              <>
+                <Sparkles className="h-4 w-4 mr-2 animate-spin" />
+                {loadingStage}
+              </>
+            ) : (
+              <>
+                <Upload className="h-4 w-4 mr-2" />
+                Upload & Generate AI Content
+              </>
+            )}
           </Button>
         </form>
       </main>
