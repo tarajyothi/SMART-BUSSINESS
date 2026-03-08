@@ -43,8 +43,8 @@ const HeroSection = () => (
           AgentHub AI helps small sellers automatically create product pages, marketing content, and social posts — in seconds.
         </p>
         <div className="flex items-center justify-center gap-4">
-          <Button variant="hero" size="lg">Start Selling</Button>
-          <Button variant="hero-outline" size="lg">View Demo</Button>
+          <Link to="/signup"><Button variant="hero" size="lg">Start Selling</Button></Link>
+          <Link to="/login"><Button variant="hero-outline" size="lg">View Demo</Button></Link>
         </div>
       </motion.div>
     </div>

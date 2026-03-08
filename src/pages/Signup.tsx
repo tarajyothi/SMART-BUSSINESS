@@ -28,8 +28,8 @@ const Signup = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Check your email to confirm your account!");
-      navigate("/login");
+      toast.success("Account created! Redirecting to dashboard...");
+      navigate("/dashboard");
     }
     setLoading(false);
   };
