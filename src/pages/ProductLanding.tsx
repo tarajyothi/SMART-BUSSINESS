@@ -153,11 +153,18 @@ const ProductLanding = () => {
                 className="w-full mb-4 text-lg h-14"
                 onClick={() => {
                   supabase.from("product_events").insert({ product_id: product.id, event_type: "click" });
+                  addItem({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image_url: product.image_url,
+                    slug: product.slug,
+                  });
                   toast.success("Added to cart!");
                 }}
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                Buy Now
+                Add to Cart
               </Button>
 
               {/* Share Buttons */}
