@@ -55,6 +55,7 @@ const Dashboard = () => {
   const actions = [
     { icon: Upload, label: "Upload Product", desc: "Add a new product to your store", href: "/upload" },
     { icon: List, label: "My Products", desc: "View and manage your listings", href: "/dashboard" },
+    { icon: ClipboardList, label: "Orders", desc: "View and manage customer orders", href: "/orders" },
     { icon: BarChart3, label: "Analytics", desc: "Track your performance metrics", href: "/analytics" },
     { icon: Share2, label: "Social Accounts", desc: "Connect your social media platforms", href: "/social-accounts" },
   ];
