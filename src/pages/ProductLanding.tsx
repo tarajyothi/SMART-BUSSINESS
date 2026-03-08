@@ -135,7 +135,15 @@ const ProductLanding = () => {
                 <p className="text-muted-foreground text-lg leading-relaxed mb-8">{product.description}</p>
               )}
 
-              <Button variant="hero" size="lg" className="w-full mb-4 text-lg h-14">
+              <Button
+                variant="hero"
+                size="lg"
+                className="w-full mb-4 text-lg h-14"
+                onClick={() => {
+                  supabase.from("product_events").insert({ product_id: product.id, event_type: "click" });
+                  toast.success("Added to cart!");
+                }}
+              >
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 Buy Now
               </Button>
