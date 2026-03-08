@@ -59,6 +59,7 @@ const UploadProduct = () => {
           user_id: user.id,
           name,
           price: parseFloat(price),
+          description,
           image_url,
         })
         .select()
@@ -67,7 +68,7 @@ const UploadProduct = () => {
       if (error) throw error;
 
       toast.success("Product uploaded successfully!");
-      navigate(`/product/${data.id}`);
+      navigate(`/p/${data.slug}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to upload product");
     } finally {
