@@ -48,6 +48,7 @@ const App = () => (
                 <ProtectedRoute><SocialAccounts /></ProtectedRoute>
               } />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </CartProvider>

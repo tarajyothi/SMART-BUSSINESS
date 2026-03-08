@@ -126,9 +126,11 @@ const Cart = () => {
               <span className="font-display text-xl font-bold text-foreground">Total</span>
               <span className="font-display text-2xl font-bold text-gradient">₹{totalPrice.toFixed(2)}</span>
             </div>
-            <Button variant="hero" className="w-full h-14 text-lg">
-              Proceed to Checkout
-            </Button>
+            <Link to="/checkout">
+              <Button variant="hero" className="w-full h-14 text-lg">
+                Proceed to Checkout
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </main>
