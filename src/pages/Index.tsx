@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => (
   <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
@@ -15,7 +16,7 @@ const Navbar = () => (
         <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
         <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
       </div>
-      <Button variant="hero" size="sm">Start Selling</Button>
+      <Link to="/signup"><Button variant="hero" size="sm">Start Selling</Button></Link>
     </div>
   </nav>
 );
@@ -42,8 +43,8 @@ const HeroSection = () => (
           AgentHub AI helps small sellers automatically create product pages, marketing content, and social posts — in seconds.
         </p>
         <div className="flex items-center justify-center gap-4">
-          <Button variant="hero" size="lg">Start Selling</Button>
-          <Button variant="hero-outline" size="lg">View Demo</Button>
+          <Link to="/signup"><Button variant="hero" size="lg">Start Selling</Button></Link>
+          <Link to="/login"><Button variant="hero-outline" size="lg">View Demo</Button></Link>
         </div>
       </motion.div>
     </div>
@@ -211,9 +212,11 @@ const PricingSection = () => {
                   </li>
                 ))}
               </ul>
-              <Button variant={plan.highlight ? "hero" : "hero-outline"} className="w-full">
-                Get Started
-              </Button>
+              <Link to="/signup">
+                <Button variant={plan.highlight ? "hero" : "hero-outline"} className="w-full">
+                  Get Started
+                </Button>
+              </Link>
             </motion.div>
           ))}
         </div>
