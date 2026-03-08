@@ -64,7 +64,7 @@ const Orders = () => {
         return items?.some((item) => productIds.includes(item.product_id));
       });
 
-      setOrders(sellerOrders as Order[]);
+      setOrders(sellerOrders as unknown as Order[]);
       setLoading(false);
     };
     fetchOrders();
