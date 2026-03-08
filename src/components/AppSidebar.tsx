@@ -10,6 +10,7 @@ import {
   Image as ImageIcon,
   Video,
   Megaphone,
+  Clapperboard,
   Zap,
   LogOut,
   ChevronLeft,
