@@ -26,6 +26,7 @@ import ImageStudio from "./pages/ImageStudio";
 import VideoScripts from "./pages/VideoScripts";
 import CampaignGenerator from "./pages/CampaignGenerator";
 import ProductIdeas from "./pages/ProductIdeas";
+import PostScheduler from "./pages/PostScheduler";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
