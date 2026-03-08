@@ -21,6 +21,7 @@ import Marketplace from "./pages/Marketplace";
 import Orders from "./pages/Orders";
 import Onboarding from "./pages/Onboarding";
 import MarketInsights from "./pages/MarketInsights";
+import Storefront from "./pages/Storefront";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +61,7 @@ const App = () => (
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/store/:sellerName" element={<Storefront />} />
               <Route path="/orders" element={
                 <ProtectedRoute><Orders /></ProtectedRoute>
               } />

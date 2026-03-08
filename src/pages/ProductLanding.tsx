@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
-import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash, MessageCircle, Download, Copy, Send } from "lucide-react";
+import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash, MessageCircle, Download, Copy, Send, Store } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ interface Product {
   hashtags: string;
   ai_generated: boolean;
   created_at: string;
+  user_id: string;
 }
 
 const ProductLanding = () => {
@@ -25,6 +26,7 @@ const ProductLanding = () => {
   const { addItem, totalItems } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [storeSlug, setStoreSlug] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -40,6 +42,17 @@ const ProductLanding = () => {
           product_id: data.id,
           event_type: "view",
         });
+        // Fetch seller store name for Visit Store link
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("store_name, full_name")
+          .eq("user_id", data.user_id)
+          .single();
+        if (profile) {
+          const name = profile.store_name || profile.full_name || "";
+          const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+          if (slug) setStoreSlug(slug);
+        }
       }
       setLoading(false);
     };
@@ -168,6 +181,13 @@ const ProductLanding = () => {
               </Button>
 
               {/* Share Buttons */}
+              {storeSlug && (
+                <Link to={`/store/${storeSlug}`}>
+                  <Button variant="hero-outline" size="lg" className="w-full mb-4 gap-2">
+                    <Store className="h-5 w-5" /> Visit Store
+                  </Button>
+                </Link>
+              )}
               <div className="glass-card rounded-xl p-5 mt-6">
                 <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Share2 className="h-4 w-4 text-primary" />
