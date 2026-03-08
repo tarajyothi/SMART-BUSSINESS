@@ -80,8 +80,8 @@ const Dashboard = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + i * 0.1 }}
-                className="glass-card rounded-xl p-6 text-left hover:border-primary/30 transition-all group cursor-pointer"
-              >
+                onClick={() => navigate(a.href)}
+                className="glass-card rounded-xl p-6 text-left hover:border-primary/30 transition-all group cursor-pointer">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                   <a.icon className="h-5 w-5 text-primary" />
                 </div>
