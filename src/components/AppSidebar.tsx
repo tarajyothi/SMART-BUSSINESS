@@ -9,6 +9,7 @@ import {
   ClipboardList,
   Image as ImageIcon,
   Video,
+  Film,
   Megaphone,
   Clapperboard,
   Zap,
