@@ -35,8 +35,9 @@ const cards = [
 
 const ReelGenerator = () => {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProductId, setSelectedProductId] = useState("");
+  const [selectedProductId, setSelectedProductId] = useState(searchParams.get("product") || "");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ReelResult | null>(null);
 
