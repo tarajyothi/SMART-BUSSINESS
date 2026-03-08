@@ -77,6 +77,55 @@ const ProblemSection = () => (
   </section>
 );
 
+const HowItWorksSection = () => {
+  const steps = [
+    { icon: Upload, step: "01", title: "Upload Product", desc: "Add your product photo and basic details — name, price, and category. That's all we need." },
+    { icon: Sparkles, step: "02", title: "AI Generates Marketing Content", desc: "Our AI creates product descriptions, social captions, hashtags, and a ready-to-share landing page." },
+    { icon: Globe, step: "03", title: "Publish Everywhere", desc: "Share your product across Instagram, Facebook, WhatsApp, and your own storefront in one click." },
+  ];
+
+  return (
+    <section className="py-24 relative">
+      <div className="container mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">How It Works</p>
+          <h2 className="font-display text-3xl md:text-5xl font-bold">
+            Three steps to <span className="text-gradient">start selling</span>
+          </h2>
+        </motion.div>
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto relative">
+          {/* Connector lines */}
+          <div className="hidden md:block absolute top-16 left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] h-px bg-gradient-to-r from-primary/40 via-primary/20 to-primary/40" />
+          {steps.map((s, i) => (
+            <motion.div
+              key={s.title}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.2 }}
+              className="glass-card rounded-xl p-8 text-center hover:border-primary/30 transition-all relative group"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5 group-hover:bg-primary/20 transition-colors relative">
+                <s.icon className="h-6 w-6 text-primary" />
+                <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
+                  {s.step}
+                </span>
+              </div>
+              <h3 className="font-display text-xl font-semibold mb-3 text-foreground">{s.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const SolutionSection = () => {
   const items = [
     { title: "Product Description", desc: "Compelling copy that converts browsers into buyers" },
