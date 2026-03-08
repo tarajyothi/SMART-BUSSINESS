@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Zap } from "lucide-react";
+import { Zap, Quote } from "lucide-react";
+import testimonial1 from "@/assets/testimonial-1.jpg";
+import testimonial2 from "@/assets/testimonial-2.jpg";
+import testimonial3 from "@/assets/testimonial-3.jpg";
 import { Link } from "react-router-dom";
 
 const Navbar = () => (
@@ -162,6 +165,54 @@ const FeaturesSection = () => {
   );
 };
 
+const TestimonialsSection = () => {
+  const testimonials = [
+    { quote: "This tool saved me hours creating product pages.", name: "Priya Sharma", role: "Handmade Jewelry Seller", img: testimonial1 },
+    { quote: "I can launch products in seconds.", name: "Arjun Mehta", role: "Dropshipping Entrepreneur", img: testimonial2 },
+    { quote: "Perfect for small Instagram sellers.", name: "Sneha Patel", role: "Instagram Shop Owner", img: testimonial3 },
+  ];
+
+  return (
+    <section className="py-24 relative">
+      <div className="container mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">Testimonials</p>
+          <h2 className="font-display text-3xl md:text-5xl font-bold">
+            Loved by <span className="text-gradient">sellers</span>
+          </h2>
+        </motion.div>
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.15 }}
+              className="glass-card rounded-xl p-8 hover:border-primary/30 transition-all relative"
+            >
+              <Quote className="h-8 w-8 text-primary/20 mb-4" />
+              <p className="text-foreground text-lg mb-6 leading-relaxed">"{t.quote}"</p>
+              <div className="flex items-center gap-3">
+                <img src={t.img} alt={t.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20" />
+                <div>
+                  <p className="font-display font-semibold text-sm text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.role}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const PricingSection = () => {
   const plans = [
     { name: "Free", price: "₹0", period: "forever", features: ["5 products", "Basic AI writing", "1 landing page"], highlight: false },
@@ -251,6 +302,7 @@ const Index = () => {
       <ProblemSection />
       <SolutionSection />
       <FeaturesSection />
+      <TestimonialsSection />
       <PricingSection />
       <Footer />
     </div>
