@@ -17,6 +17,7 @@ import Analytics from "./pages/Analytics";
 import SocialAccounts from "./pages/SocialAccounts";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Marketplace from "./pages/Marketplace";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
               } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/marketplace" element={<Marketplace />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </CartProvider>

@@ -11,6 +11,7 @@ const Navbar = () => (
         <span className="font-display text-xl font-bold text-foreground">AgentHub AI</span>
       </div>
       <div className="hidden md:flex items-center gap-8">
+        <Link to="/marketplace" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Marketplace</Link>
         <a href="#problem" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Problem</a>
         <a href="#solution" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Solution</a>
         <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
