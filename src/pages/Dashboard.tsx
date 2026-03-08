@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut } from "lucide-react";
+import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Dashboard = () => {
