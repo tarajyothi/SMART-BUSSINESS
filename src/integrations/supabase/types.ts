@@ -16,10 +16,13 @@ export type Database = {
     Tables: {
       products: {
         Row: {
+          ai_generated: boolean | null
           created_at: string
           description: string | null
+          hashtags: string | null
           id: string
           image_url: string | null
+          instagram_caption: string | null
           name: string
           price: number
           slug: string | null
@@ -27,10 +30,13 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          ai_generated?: boolean | null
           created_at?: string
           description?: string | null
+          hashtags?: string | null
           id?: string
           image_url?: string | null
+          instagram_caption?: string | null
           name: string
           price: number
           slug?: string | null
@@ -38,10 +44,13 @@ export type Database = {
           user_id: string
         }
         Update: {
+          ai_generated?: boolean | null
           created_at?: string
           description?: string | null
+          hashtags?: string | null
           id?: string
           image_url?: string | null
+          instagram_caption?: string | null
           name?: string
           price?: number
           slug?: string | null
