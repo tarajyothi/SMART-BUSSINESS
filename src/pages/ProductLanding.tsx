@@ -181,6 +181,13 @@ const ProductLanding = () => {
               </Button>
 
               {/* Share Buttons */}
+              {storeSlug && (
+                <Link to={`/store/${storeSlug}`}>
+                  <Button variant="hero-outline" size="lg" className="w-full mb-4 gap-2">
+                    <Store className="h-5 w-5" /> Visit Store
+                  </Button>
+                </Link>
+              )}
               <div className="glass-card rounded-xl p-5 mt-6">
                 <p className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Share2 className="h-4 w-4 text-primary" />
