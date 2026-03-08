@@ -18,6 +18,7 @@ interface Product {
   hashtags: string;
   ai_generated: boolean;
   created_at: string;
+  user_id: string;
 }
 
 const ProductLanding = () => {
