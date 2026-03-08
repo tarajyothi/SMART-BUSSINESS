@@ -36,6 +36,9 @@ const App = () => (
             } />
             <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/p/:slug" element={<ProductLanding />} />
+            <Route path="/analytics" element={
+              <ProtectedRoute><Analytics /></ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
