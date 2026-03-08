@@ -75,6 +75,9 @@ const App = () => (
               <Route path="/product-ideas" element={
                 <ProtectedRoute><ProductIdeas /></ProtectedRoute>
               } />
+              <Route path="/post-scheduler" element={
+                <ProtectedRoute><PostScheduler /></ProtectedRoute>
+              } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/marketplace" element={<Marketplace />} />
