@@ -23,6 +23,7 @@ import Onboarding from "./pages/Onboarding";
 import MarketInsights from "./pages/MarketInsights";
 import Storefront from "./pages/Storefront";
 import ImageStudio from "./pages/ImageStudio";
+import VideoScripts from "./pages/VideoScripts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
