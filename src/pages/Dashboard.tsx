@@ -160,6 +160,41 @@ const Dashboard = () => {
       .slice(0, 8);
   }, [products, socialPosts]);
 
+  // AI Automation feed — all AI-driven actions
+  const aiAutomationFeed = useMemo(() => {
+    const items: { icon: typeof Sparkles; label: string; detail: string; time: string; color: string; bg: string }[] = [];
+
+    products.forEach((p) => {
+      if (p.ai_generated) {
+        items.push({ icon: FileText, label: "Generated description", detail: p.name, time: p.created_at, color: "text-primary", bg: "bg-primary/10" });
+      }
+      if (p.instagram_caption) {
+        items.push({ icon: MessageSquare, label: "Generated Instagram caption", detail: p.name, time: p.created_at, color: "text-purple-400", bg: "bg-purple-400/10" });
+        items.push({ icon: Hash, label: "Generated hashtags", detail: p.name, time: p.created_at, color: "text-blue-400", bg: "bg-blue-400/10" });
+      }
+    });
+
+    socialPosts.forEach((sp) => {
+      if (sp.status === "queued" || sp.status === "posted") {
+        items.push({ icon: Send, label: `Scheduled ${sp.platform} post`, detail: `Auto-post ${sp.status}`, time: sp.created_at, color: "text-green-400", bg: "bg-green-400/10" });
+      }
+    });
+
+    return items.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 10);
+  }, [products, socialPosts]);
+
+  const aiStats = useMemo(() => {
+    const descriptions = products.filter((p) => p.ai_generated).length;
+    const captions = products.filter((p) => p.instagram_caption).length;
+    const scheduled = socialPosts.filter((sp) => sp.status === "queued" || sp.status === "posted").length;
+    return [
+      { label: "Descriptions", value: descriptions },
+      { label: "Captions", value: captions },
+      { label: "Hashtags", value: captions },
+      { label: "Scheduled", value: scheduled },
+    ];
+  }, [products, socialPosts]);
+
   // AI suggestions
   const suggestions = useMemo(() => {
     const tips: { icon: typeof Lightbulb; text: string; action?: string; href?: string }[] = [];
