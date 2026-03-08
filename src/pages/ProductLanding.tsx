@@ -31,7 +31,14 @@ const ProductLanding = () => {
         .select("*")
         .eq("slug", slug!)
         .single();
-      if (!error && data) setProduct(data as Product);
+      if (!error && data) {
+        setProduct(data as Product);
+        // Track view
+        await supabase.from("product_events").insert({
+          product_id: data.id,
+          event_type: "view",
+        });
+      }
       setLoading(false);
     };
     fetchProduct();
