@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import UploadProduct from "./pages/UploadProduct";
 import ProductPage from "./pages/ProductPage";
 import ProductLanding from "./pages/ProductLanding";
+import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
