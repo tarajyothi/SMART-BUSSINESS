@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { Hash, MessageSquare } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import {
   Package,
@@ -159,6 +160,41 @@ const Dashboard = () => {
       .slice(0, 8);
   }, [products, socialPosts]);
 
+  // AI Automation feed — all AI-driven actions
+  const aiAutomationFeed = useMemo(() => {
+    const items: { icon: typeof Sparkles; label: string; detail: string; time: string; color: string; bg: string }[] = [];
+
+    products.forEach((p) => {
+      if (p.ai_generated) {
+        items.push({ icon: FileText, label: "Generated description", detail: p.name, time: p.created_at, color: "text-primary", bg: "bg-primary/10" });
+      }
+      if (p.instagram_caption) {
+        items.push({ icon: MessageSquare, label: "Generated Instagram caption", detail: p.name, time: p.created_at, color: "text-purple-400", bg: "bg-purple-400/10" });
+        items.push({ icon: Hash, label: "Generated hashtags", detail: p.name, time: p.created_at, color: "text-blue-400", bg: "bg-blue-400/10" });
+      }
+    });
+
+    socialPosts.forEach((sp) => {
+      if (sp.status === "queued" || sp.status === "posted") {
+        items.push({ icon: Send, label: `Scheduled ${sp.platform} post`, detail: `Auto-post ${sp.status}`, time: sp.created_at, color: "text-green-400", bg: "bg-green-400/10" });
+      }
+    });
+
+    return items.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 10);
+  }, [products, socialPosts]);
+
+  const aiStats = useMemo(() => {
+    const descriptions = products.filter((p) => p.ai_generated).length;
+    const captions = products.filter((p) => p.instagram_caption).length;
+    const scheduled = socialPosts.filter((sp) => sp.status === "queued" || sp.status === "posted").length;
+    return [
+      { label: "Descriptions", value: descriptions },
+      { label: "Captions", value: captions },
+      { label: "Hashtags", value: captions },
+      { label: "Scheduled", value: scheduled },
+    ];
+  }, [products, socialPosts]);
+
   // AI suggestions
   const suggestions = useMemo(() => {
     const tips: { icon: typeof Lightbulb; text: string; action?: string; href?: string }[] = [];
@@ -240,6 +276,71 @@ const Dashboard = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* AI Automation Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="rounded-xl border border-primary/20 bg-card overflow-hidden"
+        >
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-primary/5">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-primary" />
+              </div>
+              <h3 className="font-display text-sm font-semibold text-foreground">AI Automation</h3>
+            </div>
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+              {aiAutomationFeed.length} actions
+            </span>
+          </div>
+          {/* Summary counters */}
+          <div className="grid grid-cols-4 gap-px bg-border/50">
+            {aiStats.map((s) => (
+              <div key={s.label} className="bg-card px-4 py-3 text-center">
+                <p className="font-display text-lg font-bold text-foreground">{s.value}</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{s.label}</p>
+              </div>
+            ))}
+          </div>
+          {/* Timeline */}
+          <div className="px-5 py-3">
+            {aiAutomationFeed.length === 0 ? (
+              <div className="py-8 text-center">
+                <Sparkles className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">No AI actions yet. Upload a product to trigger AI automation.</p>
+              </div>
+            ) : (
+              <div className="relative">
+                {/* Timeline line */}
+                <div className="absolute left-[15px] top-2 bottom-2 w-px bg-border" />
+                <div className="space-y-1">
+                  {aiAutomationFeed.map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.25 + i * 0.04 }}
+                      className="flex items-center gap-3 py-2 pl-1 relative"
+                    >
+                      <div className={`w-[30px] h-[30px] rounded-full ${item.bg} flex items-center justify-center shrink-0 relative z-10 ring-2 ring-card`}>
+                        <item.icon className={`h-3.5 w-3.5 ${item.color}`} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm text-foreground truncate">
+                          <span className="font-medium">{item.label}</span>
+                          <span className="text-muted-foreground"> — {item.detail}</span>
+                        </p>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground shrink-0">{formatTime(item.time)}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </motion.div>
 
         {/* Main grid: Activity + Notifications + Auto-post */}
         <div className="grid lg:grid-cols-3 gap-6">
