@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.image-studio]
 verify_jwt = false
+
+[functions.video-scripts]
+verify_jwt = false

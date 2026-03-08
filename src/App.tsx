@@ -23,6 +23,7 @@ import Onboarding from "./pages/Onboarding";
 import MarketInsights from "./pages/MarketInsights";
 import Storefront from "./pages/Storefront";
 import ImageStudio from "./pages/ImageStudio";
+import VideoScripts from "./pages/VideoScripts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,9 @@ const App = () => (
               } />
               <Route path="/image-studio" element={
                 <ProtectedRoute><ImageStudio /></ProtectedRoute>
+              } />
+              <Route path="/video-scripts" element={
+                <ProtectedRoute><VideoScripts /></ProtectedRoute>
               } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
