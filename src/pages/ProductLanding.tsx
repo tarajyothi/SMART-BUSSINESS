@@ -181,6 +181,12 @@ const ProductLanding = () => {
               </Button>
 
               {/* Share Buttons */}
+              <Link to={`/reel-generator?product=${product.id}`}>
+                <Button variant="hero-outline" size="lg" className="w-full mb-4 gap-2">
+                  <Clapperboard className="h-5 w-5" /> Generate Reel Idea
+                </Button>
+              </Link>
+
               {storeSlug && (
                 <Link to={`/store/${storeSlug}`}>
                   <Button variant="hero-outline" size="lg" className="w-full mb-4 gap-2">

@@ -47,6 +47,7 @@ const aiTools = [
   { title: "Image Studio", url: "/image-studio", icon: ImageIcon },
   { title: "Video Scripts", url: "/video-scripts", icon: Video },
   { title: "Campaigns", url: "/campaigns", icon: Megaphone },
+  { title: "Reel Generator", url: "/reel-generator", icon: Clapperboard },
 ];
 
 const channels = [
