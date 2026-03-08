@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2, Send, ClipboardList, Lightbulb, Image as ImageIcon, Video } from "lucide-react";
+import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2, Send, ClipboardList, Lightbulb, Image as ImageIcon, Video, Megaphone } from "lucide-react";
 import SellerChatbot from "@/components/SellerChatbot";
 import { Switch } from "@/components/ui/switch";
 import { motion } from "framer-motion";
@@ -62,6 +62,7 @@ const Dashboard = () => {
     { icon: Lightbulb, label: "AI Insights", desc: "AI-powered market analysis & strategy", href: "/market-insights" },
     { icon: ImageIcon, label: "Image Studio", desc: "AI-powered product image editing", href: "/image-studio" },
     { icon: Video, label: "Video Scripts", desc: "Generate marketing video scripts", href: "/video-scripts" },
+    { icon: Megaphone, label: "Campaigns", desc: "AI marketing campaign generator", href: "/campaigns" },
   ];
 
   return (

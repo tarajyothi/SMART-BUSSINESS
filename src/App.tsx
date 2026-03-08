@@ -24,6 +24,7 @@ import MarketInsights from "./pages/MarketInsights";
 import Storefront from "./pages/Storefront";
 import ImageStudio from "./pages/ImageStudio";
 import VideoScripts from "./pages/VideoScripts";
+import CampaignGenerator from "./pages/CampaignGenerator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -65,6 +66,9 @@ const App = () => (
               } />
               <Route path="/video-scripts" element={
                 <ProtectedRoute><VideoScripts /></ProtectedRoute>
+              } />
+              <Route path="/campaigns" element={
+                <ProtectedRoute><CampaignGenerator /></ProtectedRoute>
               } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
