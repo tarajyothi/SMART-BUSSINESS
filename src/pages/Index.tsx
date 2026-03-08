@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Zap } from "lucide-react";
+import { Zap, Quote } from "lucide-react";
+import testimonial1 from "@/assets/testimonial-1.jpg";
+import testimonial2 from "@/assets/testimonial-2.jpg";
+import testimonial3 from "@/assets/testimonial-3.jpg";
 import { Link } from "react-router-dom";
 
 const Navbar = () => (
