@@ -152,6 +152,19 @@ const UploadProduct = () => {
             />
           </div>
 
+          {/* Description */}
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-foreground">Description</Label>
+            <textarea
+              id="description"
+              placeholder="Describe your product..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className="w-full rounded-md bg-secondary border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+            />
+          </div>
+
           <Button type="submit" variant="hero" className="w-full" disabled={loading}>
             <Upload className="h-4 w-4 mr-2" />
             {loading ? "Uploading..." : "Upload Product"}
