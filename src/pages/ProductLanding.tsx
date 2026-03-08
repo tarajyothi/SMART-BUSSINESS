@@ -42,6 +42,17 @@ const ProductLanding = () => {
           product_id: data.id,
           event_type: "view",
         });
+        // Fetch seller store name for Visit Store link
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("store_name, full_name")
+          .eq("user_id", data.user_id)
+          .single();
+        if (profile) {
+          const name = profile.store_name || profile.full_name || "";
+          const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+          if (slug) setStoreSlug(slug);
+        }
       }
       setLoading(false);
     };
