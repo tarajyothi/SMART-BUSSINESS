@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2, Send, ClipboardList, Lightbulb, Image as ImageIcon, Video } from "lucide-react";
+import SellerChatbot from "@/components/SellerChatbot";
 import { Switch } from "@/components/ui/switch";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
