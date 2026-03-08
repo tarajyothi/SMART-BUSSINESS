@@ -54,6 +54,9 @@ const App = () => (
               <Route path="/social-accounts" element={
                 <ProtectedRoute><SocialAccounts /></ProtectedRoute>
               } />
+              <Route path="/market-insights" element={
+                <ProtectedRoute><MarketInsights /></ProtectedRoute>
+              } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/marketplace" element={<Marketplace />} />
