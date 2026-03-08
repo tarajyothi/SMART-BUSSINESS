@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { CartProvider } from "@/contexts/CartContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -14,6 +15,7 @@ import ProductPage from "./pages/ProductPage";
 import ProductLanding from "./pages/ProductLanding";
 import Analytics from "./pages/Analytics";
 import SocialAccounts from "./pages/SocialAccounts";
+import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,26 +27,29 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute><Dashboard /></ProtectedRoute>
-            } />
-            <Route path="/upload" element={
-              <ProtectedRoute><UploadProduct /></ProtectedRoute>
-            } />
-            <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/p/:slug" element={<ProductLanding />} />
-            <Route path="/analytics" element={
-              <ProtectedRoute><Analytics /></ProtectedRoute>
-            } />
-            <Route path="/social-accounts" element={
-              <ProtectedRoute><SocialAccounts /></ProtectedRoute>
-            } />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <CartProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute><Dashboard /></ProtectedRoute>
+              } />
+              <Route path="/upload" element={
+                <ProtectedRoute><UploadProduct /></ProtectedRoute>
+              } />
+              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/p/:slug" element={<ProductLanding />} />
+              <Route path="/analytics" element={
+                <ProtectedRoute><Analytics /></ProtectedRoute>
+              } />
+              <Route path="/social-accounts" element={
+                <ProtectedRoute><SocialAccounts /></ProtectedRoute>
+              } />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </CartProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash, MessageCircle, Download, Copy, Send } from "lucide-react";
 import { motion } from "framer-motion";
@@ -21,6 +22,7 @@ interface Product {
 
 const ProductLanding = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { addItem, totalItems } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -95,6 +97,16 @@ const ProductLanding = () => {
             <Zap className="h-6 w-6 text-primary" />
             <span className="font-display text-xl font-bold text-foreground">AgentHub AI</span>
           </Link>
+          <Link to="/cart" className="relative">
+            <Button variant="ghost" size="icon">
+              <ShoppingCart className="h-5 w-5" />
+            </Button>
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </Link>
         </div>
       </nav>
 
@@ -141,11 +153,18 @@ const ProductLanding = () => {
                 className="w-full mb-4 text-lg h-14"
                 onClick={() => {
                   supabase.from("product_events").insert({ product_id: product.id, event_type: "click" });
+                  addItem({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image_url: product.image_url,
+                    slug: product.slug,
+                  });
                   toast.success("Added to cart!");
                 }}
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                Buy Now
+                Add to Cart
               </Button>
 
               {/* Share Buttons */}
