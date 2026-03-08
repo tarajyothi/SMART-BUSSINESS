@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut } from "lucide-react";
+import { Zap, Package, Eye, ShoppingCart, Upload, List, BarChart3, LogOut, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Dashboard = () => {
@@ -23,6 +23,7 @@ const Dashboard = () => {
     { icon: Upload, label: "Upload Product", desc: "Add a new product to your store", href: "/upload" },
     { icon: List, label: "My Products", desc: "View and manage your listings", href: "/dashboard" },
     { icon: BarChart3, label: "Analytics", desc: "Track your performance metrics", href: "/analytics" },
+    { icon: Share2, label: "Social Accounts", desc: "Connect your social media platforms", href: "/social-accounts" },
   ];
 
   return (

@@ -118,6 +118,39 @@ export type Database = {
         }
         Relationships: []
       }
+      social_connections: {
+        Row: {
+          account_name: string
+          connected: boolean
+          connected_at: string
+          created_at: string
+          id: string
+          platform: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_name?: string
+          connected?: boolean
+          connected_at?: string
+          created_at?: string
+          id?: string
+          platform: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          connected?: boolean
+          connected_at?: string
+          created_at?: string
+          id?: string
+          platform?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
