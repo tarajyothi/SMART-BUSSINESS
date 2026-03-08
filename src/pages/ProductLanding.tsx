@@ -35,6 +35,8 @@ const ProductLanding = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [storeSlug, setStoreSlug] = useState<string | null>(null);
+  const [reelContent, setReelContent] = useState<ReelContent | null>(null);
+  const [reelLoading, setReelLoading] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
