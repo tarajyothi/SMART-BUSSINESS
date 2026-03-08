@@ -15,6 +15,7 @@ const UploadProduct = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -58,6 +59,7 @@ const UploadProduct = () => {
           user_id: user.id,
           name,
           price: parseFloat(price),
+          description,
           image_url,
         })
         .select()
@@ -66,7 +68,7 @@ const UploadProduct = () => {
       if (error) throw error;
 
       toast.success("Product uploaded successfully!");
-      navigate(`/product/${data.id}`);
+      navigate(`/p/${data.slug}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to upload product");
     } finally {
@@ -147,6 +149,19 @@ const UploadProduct = () => {
               onChange={(e) => setPrice(e.target.value)}
               required
               className="bg-secondary border-border"
+            />
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Label htmlFor="description" className="text-foreground">Description</Label>
+            <textarea
+              id="description"
+              placeholder="Describe your product..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className="w-full rounded-md bg-secondary border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
             />
           </div>
 
