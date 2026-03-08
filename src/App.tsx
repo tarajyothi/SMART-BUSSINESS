@@ -59,6 +59,9 @@ const App = () => (
               <Route path="/market-insights" element={
                 <ProtectedRoute><MarketInsights /></ProtectedRoute>
               } />
+              <Route path="/image-studio" element={
+                <ProtectedRoute><ImageStudio /></ProtectedRoute>
+              } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/marketplace" element={<Marketplace />} />
