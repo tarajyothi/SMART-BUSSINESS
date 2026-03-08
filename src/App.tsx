@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import UploadProduct from "./pages/UploadProduct";
+import ProductPage from "./pages/ProductPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +29,10 @@ const App = () => (
             <Route path="/dashboard" element={
               <ProtectedRoute><Dashboard /></ProtectedRoute>
             } />
+            <Route path="/upload" element={
+              <ProtectedRoute><UploadProduct /></ProtectedRoute>
+            } />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

@@ -20,9 +20,9 @@ const Dashboard = () => {
   ];
 
   const actions = [
-    { icon: Upload, label: "Upload Product", desc: "Add a new product to your store" },
-    { icon: List, label: "My Products", desc: "View and manage your listings" },
-    { icon: BarChart3, label: "Analytics", desc: "Track your performance metrics" },
+    { icon: Upload, label: "Upload Product", desc: "Add a new product to your store", href: "/upload" },
+    { icon: List, label: "My Products", desc: "View and manage your listings", href: "/dashboard" },
+    { icon: BarChart3, label: "Analytics", desc: "Track your performance metrics", href: "/dashboard" },
   ];
 
   return (
@@ -80,8 +80,8 @@ const Dashboard = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + i * 0.1 }}
-                className="glass-card rounded-xl p-6 text-left hover:border-primary/30 transition-all group cursor-pointer"
-              >
+                onClick={() => navigate(a.href)}
+                className="glass-card rounded-xl p-6 text-left hover:border-primary/30 transition-all group cursor-pointer">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                   <a.icon className="h-5 w-5 text-primary" />
                 </div>
@@ -96,7 +96,7 @@ const Dashboard = () => {
             <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h2 className="font-display text-xl font-semibold text-foreground mb-2">No products yet</h2>
             <p className="text-muted-foreground mb-6">Upload your first product to get started with AI-powered selling.</p>
-            <Button variant="hero">
+            <Button variant="hero" onClick={() => navigate("/upload")}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Product
             </Button>
