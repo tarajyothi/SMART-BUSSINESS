@@ -50,6 +50,7 @@ const aiTools = [
 
 const channels = [
   { title: "Social Accounts", url: "/social-accounts", icon: Share2 },
+  { title: "Post Scheduler", url: "/post-scheduler", icon: CalendarDays },
 ];
 
 export function AppSidebar() {
