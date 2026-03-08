@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash } from "lucide-react";
+import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash, MessageCircle, Download, Copy, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -201,6 +201,93 @@ const ProductLanding = () => {
             </div>
           </motion.div>
         )}
+
+        {/* Publish Everywhere Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="mt-12"
+        >
+          <h2 className="font-display text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
+            <Send className="h-5 w-5 text-primary" />
+            Publish Everywhere
+          </h2>
+          <p className="text-muted-foreground mb-6">Promote your product across all channels in one click.</p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Copy Instagram Caption */}
+            <button
+              onClick={handleCopyCaption}
+              className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center mx-auto mb-3 group-hover:from-pink-500/30 group-hover:to-purple-500/30 transition-colors">
+                <Instagram className="h-6 w-6 text-pink-400" />
+              </div>
+              <p className="font-display text-sm font-semibold text-foreground">Copy Caption</p>
+              <p className="text-xs text-muted-foreground mt-1">Caption + Hashtags</p>
+            </button>
+
+            {/* Share to WhatsApp */}
+            <button
+              onClick={() => {
+                const text = `Check out *${product.name}* for just ₹${product.price}!\n\n${product.description || ""}\n\n${shareUrl}`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+              }}
+              className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-green-500/15 flex items-center justify-center mx-auto mb-3 group-hover:bg-green-500/25 transition-colors">
+                <MessageCircle className="h-6 w-6 text-green-400" />
+              </div>
+              <p className="font-display text-sm font-semibold text-foreground">WhatsApp</p>
+              <p className="text-xs text-muted-foreground mt-1">Share via message</p>
+            </button>
+
+            {/* Copy Product Link */}
+            <button
+              onClick={handleCopyLink}
+              className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
+                <Link2 className="h-6 w-6 text-primary" />
+              </div>
+              <p className="font-display text-sm font-semibold text-foreground">Copy Link</p>
+              <p className="text-xs text-muted-foreground mt-1">Product page URL</p>
+            </button>
+
+            {/* Download Product Image */}
+            <button
+              onClick={async () => {
+                if (!product.image_url) {
+                  toast.error("No product image to download");
+                  return;
+                }
+                try {
+                  const response = await fetch(product.image_url);
+                  const blob = await response.blob();
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `${product.slug || product.name}.${blob.type.split("/")[1] || "jpg"}`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                  toast.success("Image downloaded!");
+                } catch {
+                  toast.error("Failed to download image");
+                }
+              }}
+              className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all group cursor-pointer"
+            >
+              <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-500/25 transition-colors">
+                <Download className="h-6 w-6 text-blue-400" />
+              </div>
+              <p className="font-display text-sm font-semibold text-foreground">Download</p>
+              <p className="text-xs text-muted-foreground mt-1">Product image</p>
+            </button>
+          </div>
+        </motion.div>
       </main>
 
       <footer className="border-t border-border py-8 mt-16">
