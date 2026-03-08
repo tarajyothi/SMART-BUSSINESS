@@ -15,6 +15,7 @@ const UploadProduct = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
