@@ -212,9 +212,11 @@ const PricingSection = () => {
                   </li>
                 ))}
               </ul>
-              <Button variant={plan.highlight ? "hero" : "hero-outline"} className="w-full">
-                Get Started
-              </Button>
+              <Link to="/signup">
+                <Button variant={plan.highlight ? "hero" : "hero-outline"} className="w-full">
+                  Get Started
+                </Button>
+              </Link>
             </motion.div>
           ))}
         </div>
