@@ -71,6 +71,41 @@ const ProductLanding = () => {
 
   const shareUrl = window.location.href;
 
+  const handleGenerateReel = async () => {
+    if (!product) return;
+    setReelLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("reel-generator", {
+        body: {
+          productName: product.name,
+          productDescription: product.description,
+          productPrice: product.price,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      setReelContent(data as ReelContent);
+      toast.success("Video marketing content generated!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to generate content");
+    } finally {
+      setReelLoading(false);
+    }
+  };
+
+  const handleDownloadCaption = (text: string) => {
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `caption-${product?.slug || "product"}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("Caption downloaded!");
+  };
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareUrl);
     toast.success("Link copied to clipboard!");
