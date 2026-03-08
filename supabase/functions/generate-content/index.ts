@@ -21,20 +21,13 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const systemPrompt = `You are an expert e-commerce copywriter and social media marketer. You help small sellers create compelling content for their products. Always respond with the exact JSON structure requested. Be creative, engaging, and conversion-focused. Use emojis tastefully in captions.`;
+    const systemPrompt = `You are an expert e-commerce copywriter and social media marketer. You help small sellers create compelling content for their products across multiple platforms. Be creative, engaging, and conversion-focused. Use emojis tastefully.`;
 
-    const userPrompt = `Generate marketing content for this product:
+    const userPrompt = `Generate marketing content for this product across all major social platforms:
 Product Name: ${productName}
 Price: ₹${price}
 
-Return a JSON object with exactly these fields:
-{
-  "description": "A compelling 2-3 sentence product description that highlights benefits and creates desire to buy",
-  "instagram_caption": "An engaging Instagram caption (2-3 lines) with a call to action. Include relevant emojis.",
-  "hashtags": "10-15 relevant hashtags separated by spaces, each starting with #"
-}
-
-Return ONLY the JSON object, no other text.`;
+Generate content optimized for each platform's style and audience.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -53,15 +46,18 @@ Return ONLY the JSON object, no other text.`;
             type: "function",
             function: {
               name: "generate_product_content",
-              description: "Generate marketing content for a product",
+              description: "Generate marketing content for a product across social platforms",
               parameters: {
                 type: "object",
                 properties: {
-                  description: { type: "string", description: "Compelling product description" },
-                  instagram_caption: { type: "string", description: "Engaging Instagram caption with emojis" },
-                  hashtags: { type: "string", description: "Relevant hashtags separated by spaces" },
+                  description: { type: "string", description: "Compelling 2-3 sentence product description highlighting benefits" },
+                  instagram_caption: { type: "string", description: "Engaging Instagram caption (2-3 lines) with emojis and a call to action" },
+                  pinterest_title: { type: "string", description: "Catchy Pinterest pin title (max 100 chars) that drives saves and clicks" },
+                  youtube_script: { type: "string", description: "A 30-second YouTube Shorts script with Hook (0-3s), Product showcase (3-20s), and CTA (20-30s). Use line breaks between sections." },
+                  facebook_ad_text: { type: "string", description: "Persuasive Facebook ad copy (3-4 lines) with a strong headline, benefit, social proof hint, and CTA" },
+                  hashtags: { type: "string", description: "10-15 relevant hashtags separated by spaces, each starting with #" },
                 },
-                required: ["description", "instagram_caption", "hashtags"],
+                required: ["description", "instagram_caption", "pinterest_title", "youtube_script", "facebook_ad_text", "hashtags"],
                 additionalProperties: false,
               },
             },

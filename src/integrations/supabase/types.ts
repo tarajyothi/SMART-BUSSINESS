@@ -54,43 +54,52 @@ export type Database = {
           ai_generated: boolean | null
           created_at: string
           description: string | null
+          facebook_ad_text: string | null
           hashtags: string | null
           id: string
           image_url: string | null
           instagram_caption: string | null
           name: string
+          pinterest_title: string | null
           price: number
           slug: string | null
           updated_at: string
           user_id: string
+          youtube_script: string | null
         }
         Insert: {
           ai_generated?: boolean | null
           created_at?: string
           description?: string | null
+          facebook_ad_text?: string | null
           hashtags?: string | null
           id?: string
           image_url?: string | null
           instagram_caption?: string | null
           name: string
+          pinterest_title?: string | null
           price: number
           slug?: string | null
           updated_at?: string
           user_id: string
+          youtube_script?: string | null
         }
         Update: {
           ai_generated?: boolean | null
           created_at?: string
           description?: string | null
+          facebook_ad_text?: string | null
           hashtags?: string | null
           id?: string
           image_url?: string | null
           instagram_caption?: string | null
           name?: string
+          pinterest_title?: string | null
           price?: number
           slug?: string | null
           updated_at?: string
           user_id?: string
+          youtube_script?: string | null
         }
         Relationships: []
       }
