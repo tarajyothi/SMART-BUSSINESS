@@ -21,6 +21,7 @@ import Marketplace from "./pages/Marketplace";
 import Orders from "./pages/Orders";
 import Onboarding from "./pages/Onboarding";
 import MarketInsights from "./pages/MarketInsights";
+import Storefront from "./pages/Storefront";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
