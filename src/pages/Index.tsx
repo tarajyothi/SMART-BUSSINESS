@@ -303,6 +303,7 @@ const Index = () => {
       <ProblemSection />
       <SolutionSection />
       <FeaturesSection />
+      <SeeItInActionSection />
       <TestimonialsSection />
       <PricingSection />
       <Footer />
