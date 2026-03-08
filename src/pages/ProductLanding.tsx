@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Zap, Package, Share2, ShoppingCart, Twitter, Facebook, Link2, Sparkles, Instagram, Hash, MessageCircle, Download, Copy, Send } from "lucide-react";
 import { motion } from "framer-motion";
