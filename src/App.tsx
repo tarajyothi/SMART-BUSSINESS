@@ -22,6 +22,7 @@ import Orders from "./pages/Orders";
 import Onboarding from "./pages/Onboarding";
 import MarketInsights from "./pages/MarketInsights";
 import Storefront from "./pages/Storefront";
+import ImageStudio from "./pages/ImageStudio";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,9 @@ const App = () => (
               } />
               <Route path="/market-insights" element={
                 <ProtectedRoute><MarketInsights /></ProtectedRoute>
+              } />
+              <Route path="/image-studio" element={
+                <ProtectedRoute><ImageStudio /></ProtectedRoute>
               } />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
