@@ -166,6 +166,124 @@ const FeaturesSection = () => {
   );
 };
 
+const SeeItInActionSection = () => (
+  <section className="py-24 relative">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(190_95%_50%/0.06),transparent_60%)]" />
+    <div className="container mx-auto px-6 relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mb-16"
+      >
+        <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">Live Demo</p>
+        <h2 className="font-display text-3xl md:text-5xl font-bold">
+          See It <span className="text-gradient">In Action</span>
+        </h2>
+        <p className="text-muted-foreground mt-4 max-w-xl mx-auto">
+          Upload a product photo and watch AI generate everything you need to start selling.
+        </p>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8"
+      >
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="relative">
+            <img src={demoProduct} alt="Handmade Beaded Bracelet" className="w-full aspect-square object-cover" />
+            <div className="absolute top-3 right-3 flex gap-2">
+              <div className="w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                <Heart className="h-4 w-4 text-foreground" />
+              </div>
+              <div className="w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                <Share2 className="h-4 w-4 text-foreground" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-display text-xl font-bold text-foreground">Handmade Beaded Bracelet</h3>
+              <span className="font-display text-xl font-bold text-primary">₹349</span>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Artisan crafted • Natural stones • Adjustable fit</p>
+            <Button variant="hero" className="w-full gap-2">
+              <ShoppingCart className="h-4 w-4" /> Add to Cart
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4">
+          <div className="glass-card rounded-xl p-6 flex-1">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Zap className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-xs font-semibold text-primary uppercase tracking-wider">AI Generated Caption</span>
+            </div>
+            <p className="text-foreground leading-relaxed text-sm">
+              ✨ Handcrafted with love — each bead tells a story. Our beaded bracelet blends natural stones with artisan charm for a look that's uniquely yours. 🌿💎
+            </p>
+            <p className="text-primary text-xs mt-3">#HandmadeJewelry #BeadedBracelet #ArtisanCraft #ShopSmall #NaturalStones</p>
+          </div>
+          <div className="glass-card rounded-xl p-6 flex-1">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <LinkIcon className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-xs font-semibold text-primary uppercase tracking-wider">Product Page Preview</span>
+            </div>
+            <div className="rounded-lg border border-border bg-secondary/30 p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 rounded-full bg-destructive" />
+                <div className="w-2 h-2 rounded-full bg-accent" />
+                <div className="w-2 h-2 rounded-full bg-primary" />
+                <span className="text-[10px] text-muted-foreground ml-2">agenthub.ai/p/beaded-bracelet</span>
+              </div>
+              <div className="flex gap-3">
+                <div className="w-16 h-16 rounded-md bg-muted overflow-hidden shrink-0">
+                  <img src={demoProduct} alt="" className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Handmade Beaded Bracelet</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">₹349 • In Stock</p>
+                  <div className="flex gap-1 mt-2">
+                    <div className="h-5 w-14 rounded bg-primary/20 text-[9px] flex items-center justify-center text-primary font-medium">Buy Now</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="glass-card rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Share2 className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-xs font-semibold text-primary uppercase tracking-wider">Share Everywhere</span>
+            </div>
+            <div className="flex gap-3">
+              {[
+                { icon: Instagram, label: "Instagram" },
+                { icon: Facebook, label: "Facebook" },
+                { icon: Share2, label: "WhatsApp" },
+                { icon: LinkIcon, label: "Copy Link" },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="flex-1 flex flex-col items-center gap-1.5 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer"
+                >
+                  <s.icon className="h-5 w-5 text-foreground" />
+                  <span className="text-[10px] text-muted-foreground">{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  </section>
+);
+
 const TestimonialsSection = () => {
   const testimonials = [
     { quote: "This tool saved me hours creating product pages.", name: "Priya Sharma", role: "Handmade Jewelry Seller", img: testimonial1 },
