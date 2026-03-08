@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.product-ideas]
 verify_jwt = false
+
+[functions.reel-generator]
+verify_jwt = false
