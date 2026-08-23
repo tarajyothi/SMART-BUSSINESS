@@ -1,0 +1,310 @@
+# SMART-BUSSINESS
+
+> AI-powered business assistant and content-automation platform for sellers, built on React, Supabase, and Vite.
+
+**Status:** Active Development 🚧
+**Owner:** [Tara Jyothi](https://github.com/tarajyothi)
+
+---
+
+## Overview
+
+SMART-BUSSINESS is a web application aimed at sellers and small businesses, combining an AI seller assistant with AI-driven content (reel/video) generation. The project began from a Lovable-generated React + Vite + shadcn/ui starter template and has since been extended with real product functionality: an AI chat assistant, an AI reel generator, video preview, voice narration (with a fallback mechanism), and Progressive Web App support, backed by Supabase.
+
+This README documents what is confirmed by the repository's structure and commit history. Implementation-level details that were not directly visible (exact AI provider/model, specific env variable names, exact database schema) are described at the level the available evidence supports, and are flagged accordingly rather than invented.
+
+---
+
+## ✨ Key Features
+
+Based on the project's directory structure and commit history:
+
+- 🤖 **AI Seller Assistant (chat)** — introduced via the `package.json` update *"Add AI Seller Assistant chat"*
+- 🎬 **AI Reel Generator** — implemented as a Supabase-backed feature, introduced via *"Add AI Reel Generator"*
+- 📹 **Video Preview** — added to the frontend via *"Video Preview section added"*
+- 🎙️ **Voice Narration with fallback** — most recent commit on the repository: *"Add voice narration fallback"*
+- 📱 **Progressive Web App (PWA)** — installable app support and icons added via *"Add PWA support and icon"* and *"Add PWA icons"*
+- ⚡ **Modern React interface** — built with Vite, TypeScript, and shadcn/ui
+- ☁️ **Supabase backend** — dedicated `supabase/` directory in the project
+
+---
+
+## 🎯 Problem
+
+Small sellers and first-time business owners typically lack the time, design skills, and technical resources to produce marketing content (such as product reels/videos with narration) or to get quick, reliable answers to day-to-day business questions.
+
+## 💡 Solution
+
+SMART-BUSSINESS gives sellers a single web platform where they can:
+
+- Chat with an AI assistant for seller/business-related help
+- Generate promotional reels/video content from their product information
+- Preview the generated video before using it
+- Get automatic voice narration on generated content, with a fallback mechanism if narration generation isn't available
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    User --> Frontend[React + Vite Frontend]
+    Frontend --> AssistantUI[AI Seller Assistant Chat UI]
+    Frontend --> ReelUI[AI Reel Generator UI]
+    AssistantUI --> Supabase[Supabase Backend]
+    ReelUI --> Supabase
+    Supabase --> AIProcessing[AI Reel / Content Generation]
+    AIProcessing --> Narration[Voice Narration + Fallback]
+    AIProcessing --> Preview[Video Preview]
+    Supabase --> Data[(Supabase Database / Storage)]
+    Narration --> User
+    Preview --> User
+```
+
+The exact internal composition of the Supabase layer (specific Edge Functions, database tables, and RLS policies) could not be confirmed from directory listings alone and would require inspecting the contents of `supabase/` directly.
+
+---
+
+## 🛠️ Tech Stack
+
+Confirmed from the repository's own technology detection and configuration files present in the project:
+
+| Category | Technology |
+|---|---|
+| Frontend framework | React |
+| Language | TypeScript |
+| Build tool | Vite |
+| Styling | Tailwind CSS |
+| UI components | shadcn/ui (`components.json` present) |
+| Backend / DB / Functions | Supabase (`supabase/` directory present) |
+| Testing | Vitest (`vitest.config.ts` present) |
+| Linting | ESLint (`eslint.config.js` present) |
+| Package manager | Bun (`bun.lock` most recently updated); `package-lock.json`/`bun.lockb` also present from the original template |
+| PWA | Web app manifest + icons (`public/` directory, PWA-related commits) |
+
+The exact AI provider/model powering the Seller Assistant chat and the Reel Generator was not visible from file/folder metadata and is not asserted here. It is implemented somewhere in the `supabase/` functions and/or client-side integration code.
+
+---
+
+## 📁 Project Structure
+
+```text
+SMART-BUSSINESS/
+├── public/              # Static assets, PWA manifest and icons
+├── src/                 # Application source (includes Video Preview UI and other components)
+├── supabase/             # Supabase backend: functions / config (includes AI Reel Generator logic)
+├── .env                  # Environment variables (not committed with real values)
+├── .gitignore
+├── components.json       # shadcn/ui configuration
+├── eslint.config.js       # ESLint configuration
+├── index.html
+├── package.json           # Dependencies and scripts (Seller Assistant chat added here)
+├── postcss.config.js
+├── tailwind.config.ts      # Tailwind CSS configuration
+├── tsconfig.json / tsconfig.app.json / tsconfig.node.json
+├── vite.config.ts          # Vite build configuration (PWA icons/config)
+├── vitest.config.ts        # Vitest testing configuration
+├── bun.lock / bun.lockb / package-lock.json
+└── README.md
+```
+
+The internal composition of `src/` (specific components, pages, hooks) and `supabase/` (specific functions, migrations) was not visible from the repository's file listing and would require reading those files directly to document precisely.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** (an LTS version is recommended; exact minimum version was not confirmed in the repository)
+- **Bun** (recommended, based on the presence of `bun.lock`) — or `npm`, since `package-lock.json` is also present
+- A **Supabase project/account**, since the app depends on a `supabase/` backend
+- Any **AI API key(s)** required by the Seller Assistant / Reel Generator backend logic (exact provider not confirmed — see note above)
+
+### Installation
+
+```bash
+git clone https://github.com/tarajyothi/SMART-BUSSINESS.git
+cd SMART-BUSSINESS
+
+# Using Bun (recommended based on repo's lockfile)
+bun install
+
+# or, using npm
+npm install
+```
+
+### Environment Variables
+
+The repository includes a `.env` file, confirming that environment configuration is required. The actual variable names could not be read from the file listing alone (and real values must never be shared publicly). Based on the confirmed use of Supabase, the project will at minimum require Supabase connection variables, in the pattern typically used by Vite + Supabase projects:
+
+| Variable | Purpose | Required |
+|---|---|---|
+| `VITE_SUPABASE_URL` | Supabase project URL | Likely, not directly confirmed |
+| `VITE_SUPABASE_ANON_KEY` | Supabase public/anon API key | Likely, not directly confirmed |
+| AI provider key(s) | Used by the AI Seller Assistant / Reel Generator backend | Required, exact name(s) not confirmed |
+
+```env
+# Example only — verify actual variable names against your local .env / supabase/functions code
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+Never commit a `.env` file containing real secrets to version control.
+
+### Supabase Setup
+
+1. Create a Supabase project at [supabase.com](https://supabase.com).
+2. Add your Supabase project URL and anon key to your local `.env` file.
+3. Review the contents of the `supabase/` directory in this repository for any functions, migrations, or configuration that need to be deployed to your project (exact contents not confirmed from this listing).
+4. If Edge Functions exist under `supabase/`, deploy them using the Supabase CLI.
+5. Configure authentication and storage in your Supabase project only if your inspection of `supabase/` confirms the app uses them.
+
+### AI Configuration
+
+The AI Seller Assistant and AI Reel Generator require some AI service to be configured, most likely via a key stored in `.env` and referenced from Supabase functions or client code. The specific provider was not determinable from the file/commit listing available. Set any required AI API key in your `.env` file before running the app, referencing the variable name(s) actually used in the source code.
+
+### Run Locally
+
+```bash
+bun run dev
+# or
+npm run dev
+```
+
+---
+
+## 🔄 How It Works
+
+1. The user opens the SMART-BUSSINESS web app.
+2. The user interacts with the **AI Seller Assistant** chat to ask business-related questions or get help.
+3. The user provides product/business information to the **AI Reel Generator**.
+4. The backend (Supabase) processes the request and generates reel/video content.
+5. **Voice narration** is generated for the content; if narration generation is unavailable, a fallback mechanism is used instead.
+6. The user previews the generated video via the **Video Preview** feature.
+7. The app can be installed as a **Progressive Web App** for a native-like experience on supported devices.
+
+---
+
+## 🤖 AI Seller Assistant
+
+A chat-based assistant was added to the project (introduced alongside a `package.json` update). It is intended to help sellers with business-related questions and tasks. The exact conversational flow, AI backend, and prompt logic are implemented in the source code and were not visible from the directory/commit listing alone.
+
+## 🎬 AI Reel / Content Generation
+
+An AI Reel Generator was added as part of the `supabase/` backend. It is designed to take seller-provided input and produce video/reel content. The specific generation pipeline (image generation, video assembly, external APIs used) is implemented in the `supabase/` functions and was not visible from this listing.
+
+## 🎙️ Voice Narration
+
+Voice narration was added to generated content, with a fallback narration mechanism as the most recent confirmed feature addition to the repository. The exact narration provider/engine and the conditions that trigger the fallback were not visible from the file/commit listing.
+
+## 📹 Video Preview
+
+A dedicated Video Preview section was added to `src/`, allowing users to preview generated reel/video content within the app before using it.
+
+## 📱 Progressive Web App
+
+The project includes PWA support: a web app manifest and icons were added to `public/`, and PWA-related configuration was added to `vite.config.ts`. This allows the app to be installed on supported devices. Whether offline/service-worker functionality is implemented was not confirmed from the file listing.
+
+---
+
+## 🔐 Security
+
+- `.env` is present in the repository and must never be committed with real secret values — ensure it is listed in `.gitignore` and rotate any keys that may have been exposed.
+- Do not expose AI provider API keys or Supabase service-role keys on the client; only publishable/anon keys should be used in frontend code.
+- If Supabase Row Level Security (RLS) is used to protect data, configure and verify policies directly in your Supabase project — this could not be confirmed from the repository's file listing.
+- Review authentication implementation (if present) in the source code before relying on any protected routes.
+
+---
+
+## 🧪 Testing
+
+The project includes a `vitest.config.ts`, confirming Vitest is configured for testing:
+
+```bash
+bun run test
+# or
+npm test
+```
+
+The actual test command name and the presence/coverage of test files should be verified against the current `package.json` scripts and `src/` contents, as this could not be confirmed from the directory listing alone.
+
+---
+
+## 🏭 Production Build
+
+```bash
+bun run build
+# or
+npm run build
+```
+
+If a preview script is defined in `package.json` (standard for Vite projects), you can preview the production build with:
+
+```bash
+bun run preview
+# or
+npm run preview
+```
+
+---
+
+## ☁️ Deployment
+
+This project originated from a Lovable-generated template and remains compatible with static/SPA hosting platforms that support Vite builds, such as Vercel, Netlify, Cloudflare Pages, or Lovable's own publish flow. No deployment has been confirmed from the repository itself — set up deployment through whichever platform fits your workflow.
+
+---
+
+## 🗺️ Roadmap
+
+### Implemented (confirmed by repository history)
+
+- AI Seller Assistant chat
+- AI Reel Generator
+- Video Preview
+- Voice narration with fallback
+- PWA support
+
+### Potential Future Improvements
+
+*(Not implemented — ideas only)*
+
+- Advanced business analytics/dashboards
+- Additional AI business agents (e.g., pricing, inventory)
+- Direct social media publishing of generated reels
+- Multi-platform content publishing
+- Order and inventory management
+- Multilingual support
+
+---
+
+## 🤝 Contributing
+
+```text
+Fork
+  ↓
+Create a feature branch
+  ↓
+Make your changes
+  ↓
+Run tests (bun run test / npm test)
+  ↓
+Commit your changes
+  ↓
+Push to your fork
+  ↓
+Open a Pull Request
+```
+
+---
+
+## 📄 License
+
+No open-source license has currently been specified for this repository.
+
+---
+
+## 👩‍💻 Author
+
+**Tara Jyothi**
+GitHub: [https://github.com/tarajyothi](https://github.com/tarajyothi)
